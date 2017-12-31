@@ -11,7 +11,7 @@ namespace Api.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public DocumentViewModel(Document book)
+        public DocumentViewModel(LibraryManagement.Core.Models.Document book)
         {
             Name = book.Name;
             Description = book.Description;

@@ -21,24 +21,24 @@ namespace Api.Controllers
         {
             _libraryService = _container.Resolve<ILibraryService>();
         }
-        [Route("BorrowBook")]
+        [Route("Borrow/{id}")]
         [HttpPost]
-        public async Task<IHttpActionResult> BorrowAsync([FromBody] BorrowInformationViewModel borrowInfo)
+        public async Task<IHttpActionResult> BorrowAsync(Guid id)
         {
             await Task.Delay(1000);
             return Ok();
         }
 
-        [Route("ReturnBook")]
+        [Route("Return/{id}")]
         [HttpPost]
-        public async Task<IHttpActionResult> ReturnBookAsync([FromBody] ReturnInfo info)
+        public async Task<IHttpActionResult> ReturnAsync(Guid id)
         {
             await Task.Delay(1000);
             return Ok();
         }
         [Route("List")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetListBooksAsync()
+        public async Task<IHttpActionResult> GetAllDocumentsAsync()
         {
             var listBooks = await _libraryService.GetAllDocumentsAsync();
             var listViewBooks = listBooks.Select(book => new DocumentViewModel(book));
@@ -47,7 +47,7 @@ namespace Api.Controllers
 
         [Route("Update")]
         [HttpPut]
-        public async Task<IHttpActionResult> UpdateBookAsync([FromBody] UpdateInformationViewModel information)
+        public async Task<IHttpActionResult> UpdateDocumentInformationAsync([FromBody] DocumentViewModel document)
         {
             await Task.Delay(1000);
             return Ok();

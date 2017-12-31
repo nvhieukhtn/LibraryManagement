@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace LibraryManagement.Core.Models
 {
-    public class UpdateInformation
+    public enum DocumentGroup
     {
-
+        Science,
+        Romantic,
+        Action,
+        Magic,
+        Other
     }
 }

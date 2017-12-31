@@ -13,11 +13,22 @@ namespace LibraryManagement.Core.Models
             {"Disk", new Disk()},
             {"Book", new Book()}
         };
-        public static Document CreateDocument(string type)
+        public static Document CreateDocument(string type, string name, string description
+            ,string author, decimal price, int quantity, string group)
         {
 
             if (ListDocumentSamples.ContainsKey(type))
-                return ListDocumentSamples[type].Clone();
+            {
+                var document = ListDocumentSamples[type].Clone();
+                document.Description = description;
+                document.Name = name;
+                document.Author = author;
+                document.Price = price;
+                document.Quanity = quantity;
+                Enum.TryParse<DocumentGroup>(group, out var groupEnum);
+                document.Group = groupEnum;
+                return document;
+            }
             return null;
         }
     }

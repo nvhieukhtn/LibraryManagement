@@ -25,7 +25,8 @@ CREATE TABLE Document
 	Price DECIMAL(10,2),
 	Quantity INT,
 	[Group] NVARCHAR(50),
-	[Major] NVARCHAR(50)
+	[Major] NVARCHAR(50),
+	[Type] NVARCHAR(50)
 )
 
 IF OBJECT_ID (N'Chanel', N'U') IS NOT NULL
@@ -77,7 +78,7 @@ BEGIN
 	END
 END
 
-
+GO
 IF OBJECT_ID (N'sp_Account_Login', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Account_Login
 GO 
@@ -96,6 +97,7 @@ BEGIN
 	WHERE Username = @Username AND Password = @Password
 END
 
+GO
 IF OBJECT_ID (N'sp_Notification_Notify', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Notification_Notify
 GO
@@ -110,7 +112,7 @@ BEGIN
 	VALUES (NEWID(), @UserId, @Title, @Content, 0)
 END
 
-
+GO
 IF OBJECT_ID (N'sp_Notification_GetAllNotifications', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Notification_GetAllNotifications
 GO 
@@ -122,7 +124,7 @@ BEGIN
 	FROM NotificationUsers
 	WHERE UserId = @UserId
 END
-
+Go
 IF OBJECT_ID (N'sp_Chanel_Add', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Chanel_Add
 GO
@@ -136,7 +138,7 @@ BEGIN
 	VALUES (@Id, @Name, @Description)
 END 
 
-
+GO
 IF OBJECT_ID (N'sp_Account_Get', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Account_Get
 GO
@@ -149,7 +151,7 @@ BEGIN
 	FROM Account 
 	WHERE Token = @Token
 END 
-
+GO
 IF OBJECT_ID (N'sp_Chanel_Follow', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Chanel_Follow
 GO 
@@ -162,7 +164,7 @@ BEGIN
 		INSERT INTO ChanelSubcribes (Id, UserId, ChanelId)
 		VALUES (NEWID(), @UserId, @ChanelId)
 END 
-
+GO
 IF OBJECT_ID (N'sp_Chanel_GetAll', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Chanel_GetAll
 GO
@@ -174,6 +176,7 @@ BEGIN
 	FROM Chanel
 END
 
+GO
 IF OBJECT_ID (N'sp_Chanel_GetAllSubcribes', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Chanel_GetAllSubcribes
 GO
@@ -186,7 +189,7 @@ BEGIN
 	FROM Account acc 
 		INNER JOIN ChanelSubcribes cs ON cs.UserId = acc.ID AND cs.ChanelID = @ChanelId
 END
-
+GO
 IF OBJECT_ID (N'sp_Account_Upgrade', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Account_Upgrade
 GO 
@@ -197,6 +200,7 @@ BEGIN
 	UPDATE Account SET Type = 'VIP' WHERE Token = @Token
 END
 
+GO
 IF OBJECT_ID (N'sp_Account_Logout', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Account_Logout
 GO 
@@ -207,6 +211,7 @@ BEGIN
 	UPDATE Account SET Token = '' WHERE Token = @Token
 END
 
+GO
 IF OBJECT_ID (N'sp_Account_Downgrade', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Account_Downgrade
 GO 

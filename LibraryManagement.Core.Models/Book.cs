@@ -8,14 +8,11 @@ namespace LibraryManagement.Core.Models
 {
     public class Book:Document
     {
-        public List<string> Authors { get; set; }
-        public decimal Price { get; set; }
         public override Document Clone()
         {
-            var listAuthors = new List<string>(Authors);
             var book =  new Book
             {
-                Authors = listAuthors,
+                Author = Author,
                 Price = Price,
                 Name = Name,
                 Description = Description

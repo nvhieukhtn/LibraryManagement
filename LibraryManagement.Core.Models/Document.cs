@@ -10,14 +10,11 @@ namespace LibraryManagement.Core.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Handle { get; set; }
-        private static int _currenctHandle = 1;
 
-        protected Document()
-        {
-            Handle = _currenctHandle++;
-        }
-
+        public string Author { get; set; }
+        public decimal Price { get; set; }
+        public int Quanity { get; set; }
+        public DocumentGroup Group { get; set; }
         public abstract Document Clone();
     }
 }

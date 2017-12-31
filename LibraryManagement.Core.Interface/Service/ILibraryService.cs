@@ -10,6 +10,6 @@ namespace LibraryManagement.Core.Interface.Service
     public interface ILibraryService
     {
         Task<List<Document>> GetAllDocumentsAsync();
-        Task<bool> UpdateDocumentInformationAsync(UpdateInformation information);
+        Task<bool> UpdateDocumentInformationAsync(Document document);
     }
 }

@@ -18,12 +18,13 @@ namespace LibraryManagement.Core.Service
             _libraryRepository = libraryRepository;
         }
 
-        public Task<List<Document>> GetAllDocumentsAsync()
+        public async Task<List<Document>> GetAllDocumentsAsync()
         {
-            throw new NotImplementedException();
+            var listDocuments = await _libraryRepository.GetAllDocumentsAsync();
+            return listDocuments;
         }
 
-        public Task<bool> UpdateDocumentInformationAsync(UpdateInformation information)
+        public Task<bool> UpdateDocumentInformationAsync(Document document)
         {
             throw new NotImplementedException();
         }
