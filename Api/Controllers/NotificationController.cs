@@ -36,13 +36,13 @@ namespace Api.Controllers
         }
 
         [HttpPut]
-        [Route("FollowChanel/{chanelName}")]
-        public async Task<IHttpActionResult> FollowChanelAsync(string chanelName)
+        [Route("SubscribeChanel/{chanelName}")]
+        public async Task<IHttpActionResult> SubscribeChanelAsync(string chanelName)
         {
             var headers = Request.Headers;
 
             var token = headers.GetValues("Session").FirstOrDefault();
-            var succeed = await _chanelService.FollowChanelAsync(chanelName, token);
+            var succeed = await _chanelService.SubscribeChanelAsync(chanelName, token);
             if (succeed)
                 return Ok();
             return BadRequest();

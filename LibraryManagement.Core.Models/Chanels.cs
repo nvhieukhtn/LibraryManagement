@@ -10,22 +10,31 @@ namespace LibraryManagement.Core.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<AccountModel> ListSubscribers { get; set; }
+        public Dictionary<string, AccountModel> ListSubscribers { get; set; }
 
         public Chanels()
         {
-            ListSubscribers = new List<AccountModel>();
+            ListSubscribers = new Dictionary<string, AccountModel>();
         }
         public Chanels(string name, string description)
         {
             Name = name;
             Description = description;
-            ListSubscribers = new List<AccountModel>();
+            ListSubscribers = new Dictionary<string, AccountModel>();
         }
 
-        public void Follow(AccountModel subcriber)
+        public void Subscribe(AccountModel subscribe)
         {
-            ListSubscribers.Add(subcriber);
+            ListSubscribers.Add(subscribe.Username, subscribe);
+        }
+
+        public bool Unsubscribe(AccountModel subscribe)
+        {
+            if (ListSubscribers.ContainsKey(subscribe.Username))
+            {
+                ListSubscribers.Remove(subscribe.Username);
+            }
+            return false;
         }
     }
 }

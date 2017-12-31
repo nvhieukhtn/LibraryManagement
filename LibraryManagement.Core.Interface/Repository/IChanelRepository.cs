@@ -13,7 +13,7 @@ namespace LibraryManagement.Core.Interface.Repository
         Task<bool> NotifyAsync(Guid userId, Notification notification);
         Task<List<Notification>> GetAllNotificationsAsync(Guid userId);
         Task<bool> CreateNewChanelAsync(Chanels chanel);
-        Task<bool> FollowChanelAsync(Guid userId, Chanels chanel);
-        Task<List<AccountModel>> GetAllSubcribes(Guid chanelId);
+        Task<bool> SubscribeChanelAsync(Guid userId, Chanels chanel);
+        Task<Dictionary<string,AccountModel>> GetAllSubcribes(Guid chanelId);
     }
 }

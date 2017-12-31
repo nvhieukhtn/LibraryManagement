@@ -40,11 +40,9 @@ namespace LibraryManagement.Core.Service
             return succeed;
         }
 
-        public async Task<bool> UpgradeUserAsync(AccountModel account)
+        public async Task<bool> UpgradeUserAsync(string accountToken)
         {
-            var succeed = await _authenticationRepository.UpgradeUserAsync(account);
-            if(succeed)
-                account.AccountState = new VipAccountState();
+            var succeed = await _authenticationRepository.UpgradeUserAsync(accountToken);
             return succeed;
         }
 
@@ -52,6 +50,18 @@ namespace LibraryManagement.Core.Service
         {
             var account = await _authenticationRepository.GetAccountInformationAsync(token);
             return account;
+        }
+
+        public async Task<bool> LogoutAsync(string accountToken)
+        {
+            var succeed = await _authenticationRepository.LogoutAsync(accountToken);
+            return succeed;
+        }
+
+        public async Task<bool> DowngradeAsync(string accountToken)
+        {
+            var succeed = await _authenticationRepository.DowngradeAsync(accountToken);
+            return succeed;
         }
     }
 }

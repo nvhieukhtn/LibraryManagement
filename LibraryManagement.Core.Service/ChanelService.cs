@@ -43,23 +43,23 @@ namespace LibraryManagement.Core.Service
                 var result = true;
                 foreach (var subscriber in currentChanel.ListSubscribers)
                 {
-                    result &= await NotifyAsync(subscriber, notification);
+                    result &= await NotifyAsync(subscriber.Value, notification);
                 }
                 return result;
             }
             return false;
         }
 
-        public async Task<bool> FollowChanelAsync(string chanelName, string accountToken)
+        public async Task<bool> SubscribeChanelAsync(string chanelName, string accountToken)
         {
             var account = await _authenticationService.GetAccountInformationAsync(accountToken);
 
             if (ListChanels.ContainsKey(chanelName))
             {
                 var currentChanel = ListChanels[chanelName];
-                var succeed = await _chanelRepository.FollowChanelAsync(account.Id, currentChanel);
+                var succeed = await _chanelRepository.SubscribeChanelAsync(account.Id, currentChanel);
                 if(succeed)
-                    currentChanel.Follow(account);
+                    currentChanel.Subscribe(account);
                 return succeed;
             }
             return false;

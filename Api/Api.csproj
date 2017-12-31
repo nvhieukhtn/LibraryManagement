@@ -125,6 +125,7 @@
     <Compile Include="Models\BorrowInformationViewModel.cs" />
     <Compile Include="Models\DependencyResolution.cs" />
     <Compile Include="Models\NotificationViewModel.cs" />
+    <Compile Include="Models\Permission.cs" />
     <Compile Include="Models\ReturnInfo.cs" />
     <Compile Include="Models\UpdateInformationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

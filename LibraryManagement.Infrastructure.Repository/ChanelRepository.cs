@@ -88,7 +88,7 @@ namespace LibraryManagement.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> FollowChanelAsync(Guid userId, Chanels chanel)
+        public async Task<bool> SubscribeChanelAsync(Guid userId, Chanels chanel)
         {
             using (var db = DataAccessFactory.CreateDataAccess("sp_Chanel_Follow", DatabaseType.Write))
             {
@@ -102,9 +102,9 @@ namespace LibraryManagement.Infrastructure.Repository
             }
         }
 
-        public async Task<List<AccountModel>> GetAllSubcribes(Guid chanelId)
+        public async Task<Dictionary<string,AccountModel>> GetAllSubcribes(Guid chanelId)
         {
-            var listSubcribes = new List<AccountModel>();
+            var listSubscribers = new Dictionary<string, AccountModel>();
             using (var db = DataAccessFactory.CreateDataAccess("sp_Chanel_GetAllSubcribes", DatabaseType.Read))
             {
                 var listParams = new Dictionary<string, object>
@@ -114,14 +114,14 @@ namespace LibraryManagement.Infrastructure.Repository
                 var dataReader = await db.ExecuteReaderAsync(listParams);
                 while (dataReader.Read())
                 {
-                    var subcribe = new AccountModel
+                    var subscriber = new AccountModel
                     {
                         Id = (Guid) dataReader["Id"],
                         Username = (string) dataReader["Username"]
                     };
-                    listSubcribes.Add(subcribe);
+                    listSubscribers.Add(subscriber.Username, subscriber);
                 }
-                return listSubcribes;
+                return listSubscribers;
             }
         }
     }

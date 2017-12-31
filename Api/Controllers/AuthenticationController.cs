@@ -55,14 +55,36 @@ namespace Api.Controllers
         }
 
         [Route("UpgradeVIP")]
-        [HttpPost]
-        public async Task<IHttpActionResult> UpgradeVIPAsync([FromBody] AccountViewModel account)
+        [HttpPut]
+        public async Task<IHttpActionResult> UpgradeVIPAsync()
         {
-            var accountModel = new AccountModel
-            {
-                Token = account.Token
-            };
-            var succeed = await _authenticationService.UpgradeUserAsync(accountModel);
+            var headers = Request.Headers;
+
+            var accountToken = headers.GetValues("Session").FirstOrDefault();
+            var succeed = await _authenticationService.UpgradeUserAsync(accountToken);
+            if (succeed)
+                return Ok();
+            return BadRequest();
+        }
+
+        [Route("Downgrade")]
+        [HttpPut]
+        public async Task<IHttpActionResult> DowngradeAsync()
+        {
+            var permission = Permission.GetPermission(Request.Headers);
+            var succeed = await _authenticationService.DowngradeAsync(permission.AccountToken);
+            if (succeed)
+                return Ok();
+            return BadRequest();
+        }
+        [Route("Logout")]
+        [HttpPost]
+        public async Task<IHttpActionResult> LogoutAsync()
+        {
+            var headers = Request.Headers;
+
+            var accountToken = headers.GetValues("Session").FirstOrDefault();
+            var succeed = await _authenticationService.LogoutAsync(accountToken);
             if (succeed)
                 return Ok();
             return BadRequest();

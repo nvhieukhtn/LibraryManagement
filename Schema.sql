@@ -1,7 +1,8 @@
 -- CREATE DATABASE LibraryManagement
 -- USE LibraryManagement
 
-
+IF OBJECT_ID (N'Account', N'U') IS NOT NULL
+	DROP TABLE Account
 CREATE TABLE Account
 (
 	ID UNIQUEIDENTIFIER,
@@ -13,7 +14,8 @@ CREATE TABLE Account
 	Type NVARCHAR(50),
 	Status int
 )
---DROP TABLE Document
+IF OBJECT_ID (N'Document', N'U') IS NOT NULL
+	DROP TABLE Document
 CREATE TABLE Document
 (
 	ID UNIQUEIDENTIFIER,
@@ -26,14 +28,16 @@ CREATE TABLE Document
 	[Major] NVARCHAR(50)
 )
 
-
+IF OBJECT_ID (N'Chanel', N'U') IS NOT NULL
+	DROP TABLE Chanel
 CREATE TABLE Chanel 
 (
 	ID UNIQUEIDENTIFIER,
 	Name NVARCHAR(50),
 	Description NVARCHAR(100)
 )
-
+IF OBJECT_ID (N'ChanelSubcribes', N'U') IS NOT NULL
+	DROP TABLE ChanelSubcribes
 CREATE TABLE ChanelSubcribes
 (
 	ID UNIQUEIDENTIFIER,
@@ -41,7 +45,8 @@ CREATE TABLE ChanelSubcribes
 	ChanelID UNIQUEIDENTIFIER
 )
 
-
+IF OBJECT_ID (N'NotificationUsers', N'U') IS NOT NULL
+	DROP TABLE NotificationUsers
 CREATE TABLE NotificationUsers
 (
 	ID UNIQUEIDENTIFIER,
@@ -53,6 +58,9 @@ CREATE TABLE NotificationUsers
 
 
 ------------------------------------STORE PROCEDURE----------------------------------------
+
+IF OBJECT_ID (N'sp_Account_Register', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Account_Register
 Go
 CREATE Procedure sp_Account_Register 
 	@UserName NVARCHAR(50),
@@ -70,6 +78,8 @@ BEGIN
 END
 
 
+IF OBJECT_ID (N'sp_Account_Login', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Account_Login
 GO 
 
 CREATE PROCEDURE sp_Account_Login
@@ -86,6 +96,8 @@ BEGIN
 	WHERE Username = @Username AND Password = @Password
 END
 
+IF OBJECT_ID (N'sp_Notification_Notify', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Notification_Notify
 GO
 
 CREATE PROCEDURE sp_Notification_Notify
@@ -98,6 +110,9 @@ BEGIN
 	VALUES (NEWID(), @UserId, @Title, @Content, 0)
 END
 
+
+IF OBJECT_ID (N'sp_Notification_GetAllNotifications', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Notification_GetAllNotifications
 GO 
 CREATE PROCEDURE sp_Notification_GetAllNotifications
 	@UserId UNIQUEIDENTIFIER
@@ -108,6 +123,8 @@ BEGIN
 	WHERE UserId = @UserId
 END
 
+IF OBJECT_ID (N'sp_Chanel_Add', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Chanel_Add
 GO
 CREATE PROCEDURE sp_Chanel_Add
 	@Id UNIQUEIDENTIFIER,
@@ -119,6 +136,9 @@ BEGIN
 	VALUES (@Id, @Name, @Description)
 END 
 
+
+IF OBJECT_ID (N'sp_Account_Get', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Account_Get
 GO
 
 CREATE PROCEDURE sp_Account_Get
@@ -130,6 +150,8 @@ BEGIN
 	WHERE Token = @Token
 END 
 
+IF OBJECT_ID (N'sp_Chanel_Follow', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Chanel_Follow
 GO 
 CREATE PROCEDURE sp_Chanel_Follow
 	@UserId UNIQUEIDENTIFIER ,
@@ -141,6 +163,8 @@ BEGIN
 		VALUES (NEWID(), @UserId, @ChanelId)
 END 
 
+IF OBJECT_ID (N'sp_Chanel_GetAll', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Chanel_GetAll
 GO
 
 CREATE PROCEDURE sp_Chanel_GetAll
@@ -150,6 +174,8 @@ BEGIN
 	FROM Chanel
 END
 
+IF OBJECT_ID (N'sp_Chanel_GetAllSubcribes', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Chanel_GetAllSubcribes
 GO
 
 CREATE PROCEDURE sp_Chanel_GetAllSubcribes
@@ -159,4 +185,34 @@ BEGIN
 	SELECT acc.*
 	FROM Account acc 
 		INNER JOIN ChanelSubcribes cs ON cs.UserId = acc.ID AND cs.ChanelID = @ChanelId
+END
+
+IF OBJECT_ID (N'sp_Account_Upgrade', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Account_Upgrade
+GO 
+CREATE PROCEDURE sp_Account_Upgrade 
+	@Token UNIQUEIDENTIFIER
+AS 
+BEGIN 
+	UPDATE Account SET Type = 'VIP' WHERE Token = @Token
+END
+
+IF OBJECT_ID (N'sp_Account_Logout', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Account_Logout
+GO 
+CREATE PROCEDURE sp_Account_Logout
+	@Token UNIQUEIDENTIFIER
+AS 
+BEGIN 
+	UPDATE Account SET Token = '' WHERE Token = @Token
+END
+
+IF OBJECT_ID (N'sp_Account_Downgrade', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Account_Downgrade
+GO 
+CREATE PROCEDURE sp_Account_Downgrade
+	@Token UNIQUEIDENTIFIER
+AS 
+BEGIN
+	UPDATE Account SET Type = 'Normal' WHERE Token = @Token
 END
