@@ -22,6 +22,15 @@ namespace Api.Controllers
         {
             _chanelService = _container.Resolve<IChanelService>();
         }
+
+        [HttpGet]
+        [Route("AllChanels")]
+        public async Task<IHttpActionResult> GetAllChanelsAsync()
+        {
+            var listChanels = await _chanelService.GetAllChanelsAsync();
+            var listViewChanels = listChanels.Select(chanel => new ChanelViewModel(chanel)).ToList();
+            return Ok(listViewChanels);
+        }
         [HttpPost]
         [Route("CreateChanel")]
         public async Task<IHttpActionResult> CreateChanelAsync([FromBody] ChanelViewModel chanel)

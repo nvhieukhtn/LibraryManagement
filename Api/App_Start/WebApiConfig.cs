@@ -22,8 +22,6 @@ namespace Api
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = true;
-            config.Formatters.XmlFormatter.UseXmlSerializer = false;
         }
     }
 }

@@ -47,7 +47,11 @@ namespace LibraryManagement.Core.Service
                 }
                 return result;
             }
-            return false;
+            else
+            {
+                var succeed = await CreateNewChanelAsync(chanelName, "");
+                return succeed;
+            }
         }
 
         public async Task<bool> SubscribeChanelAsync(string chanelName, string accountToken)
@@ -83,6 +87,12 @@ namespace LibraryManagement.Core.Service
                 var chanelFull = await LoadSubcriblesAsync(chanel);
                 ListChanels.Add(chanel.Name, chanelFull);
             });
+        }
+
+        public async Task<List<Chanels>> GetAllChanelsAsync()
+        {
+            var listChanels = await _chanelRepository.LoadAllChanelsAsync();
+            return listChanels;
         }
 
         private async Task<Chanels> LoadSubcriblesAsync(Chanels chanel)

@@ -26,7 +26,8 @@ namespace LibraryManagement.Infrastructure.Repository
                     {
                         Id = (Guid) dataReader["Id"],
                         Name = (string) dataReader["Name"],
-                        Description = (string) dataReader["Description"]
+                        Description = (string) dataReader["Description"],
+                        NumberOfSubscribes =  (int) dataReader["NumberOfSubscribes"]
                     };
                     listChanels.Add(chanel);
                 }

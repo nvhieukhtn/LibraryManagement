@@ -11,5 +11,7 @@ namespace LibraryManagement.Core.Interface.Service
     {
         Task<List<Document>> GetAllDocumentsAsync();
         Task<bool> UpdateDocumentInformationAsync(Document document);
+        Task<bool> AddDocumentAsync(Document document, string accountToken);
+        Task<bool> BorrowDocumentAsync(Guid id, string accountToken);
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Api.Models;
 using LibraryManagement.Core.Interface.Service;
+using LibraryManagement.Core.Models;
 using Unity;
 
 namespace Api.Controllers
@@ -21,12 +22,28 @@ namespace Api.Controllers
         {
             _libraryService = _container.Resolve<ILibraryService>();
         }
+
+        [Route("Add")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AddDocumentAsync([FromBody] DocumentViewModel document)
+        {
+            var permission = Permission.GetPermission(Request.Headers);
+            var documentModel = LibraryFactory.CreateDocument(document.Type, document.Name, document.Description,
+                document.Author, document.Price, document.Quantity, document.Group);
+            var succeed = await _libraryService.AddDocumentAsync(documentModel, permission.AccountToken);
+            if (succeed)
+                return Ok();
+            return BadRequest();
+        }
         [Route("Borrow/{id}")]
         [HttpPost]
         public async Task<IHttpActionResult> BorrowAsync(Guid id)
         {
-            await Task.Delay(1000);
-            return Ok();
+            var permission = Permission.GetPermission(Request.Headers);
+            var succeed = await _libraryService.BorrowDocumentAsync(id, permission.AccountToken);
+            if (succeed)
+                return Ok();
+            return BadRequest();
         }
 
         [Route("Return/{id}")]

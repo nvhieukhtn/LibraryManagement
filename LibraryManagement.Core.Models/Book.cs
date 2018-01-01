@@ -19,5 +19,10 @@ namespace LibraryManagement.Core.Models
             };
             return book;
         }
+
+        public override string GetDocumentType()
+        {
+            return "Book";
+        }
     }
 }

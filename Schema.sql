@@ -23,10 +23,23 @@ CREATE TABLE Document
 	[Description] NVARCHAR(256),
 	Author NVARCHAR(50),
 	Price DECIMAL(10,2),
+	AvailableQuantity INT,
 	Quantity INT,
 	[Group] NVARCHAR(50),
 	[Major] NVARCHAR(50),
-	[Type] NVARCHAR(50)
+	[Type] NVARCHAR(50),
+	UploadedBy UNIQUEIDENTIFIER
+)
+
+IF OBJECT_ID (N'BorrowedDocument', N'U') IS NOT NULL
+	DROP TABLE BorrowedDocument
+CREATE TABLE BorrowedDocument
+(
+	ID UNIQUEIDENTIFIER,
+	UserId UNIQUEIDENTIFIER,
+	DocumentId UNIQUEIDENTIFIER,
+	ReturnDate DATETIME,
+	BorrowedDate DATETIME
 )
 
 IF OBJECT_ID (N'Chanel', N'U') IS NOT NULL
@@ -172,8 +185,12 @@ GO
 CREATE PROCEDURE sp_Chanel_GetAll
 AS 
 BEGIN	
-	SELECT *
-	FROM Chanel
+	SELECT 
+		c.ID, 
+		c.Name, 
+		c.Description, 
+		(SELECT COUNT(1) FROM ChanelSubcribes cs WHERE cs.ChanelId = c.ID ) AS 'NumberOfSubscribes'
+	FROM Chanel c 
 END
 
 GO
@@ -220,4 +237,71 @@ CREATE PROCEDURE sp_Account_Downgrade
 AS 
 BEGIN
 	UPDATE Account SET Type = 'Normal' WHERE Token = @Token
+END
+
+
+GO
+IF OBJECT_ID (N'sp_Document_Add', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Document_Add
+GO 
+CREATE PROCEDURE sp_Document_Add
+	@Name NVARCHAR(50),
+	@Description NVARCHAR(MAX),
+	@Author NVARCHAR(50),
+	@Price DECIMAL(10,2),
+	@Quantity INT,
+	@Group NVARCHAR(50),
+	@Type NVARCHAR(50),
+	@UploadedBy UNIQUEIDENTIFIER
+AS 
+BEGIN 
+	INSERT INTO Document (ID, Name, [Description], Author, Price, AvailableQuantity, Quantity, [Group], [Type], UploadedBy)
+	VALUES (NEWID(), @Name, @Description, @Author, @Price, 0, @Quantity, @Group, @Type, @UploadedBy)
+END
+	
+GO 
+IF OBJECT_ID (N'sp_Document_Borrow', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Document_Borrow
+GO
+CREATE PROCEDURE sp_Document_Borrow 
+	@DocumentId UNIQUEIDENTIFIER,
+	@UserId UNIQUEIDENTIFIER
+AS 
+BEGIN
+BEGIN TRAN
+BEGIN TRY
+	IF EXISTS (SELECT 1 FROM Document WHERE AvailableQuantity > 0 AND ID = @DocumentId)
+		BEGIN 
+			UPDATE Document SET AvailableQuantity = AvailableQuantity - 1 WHERE ID = @DocumentId
+			INSERT INTO BorrowedDocument (ID, UserId, DocumentId, ReturnDate, BorrowedDate)
+			VALUES (NEWID(), @UserId, @DocumentId, NULL, GETUTCDATE())
+		END
+COMMIT
+END TRY
+BEGIN CATCH 
+ROLLBACK
+END CATCH
+END
+
+GO
+IF OBJECT_ID (N'sp_Document_GetAll', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Document_GetAll
+GO
+
+CREATE PROCEDURE sp_Document_GetAll
+AS 
+BEGIN
+	SELECT 
+		d.ID, 
+		d.Name,
+		d.[Description],
+		d.Author,
+		d.Price,
+		d.Quantity,
+		d.[Group],
+		d.Type,
+		UploadedBy = a.Username
+
+	FROM Document d
+		INNER JOIN Account a ON a.ID = d.UploadedBy
 END

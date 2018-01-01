@@ -25,7 +25,7 @@ namespace LibraryManagement.Core.Service
             var succeed  = await _authenticationRepository.LoginAsync(account);
             if (succeed)
             {  
-                if (ListOnlineUsers.ContainsKey(account.Username))
+                if (!ListOnlineUsers.ContainsKey(account.Username))
                     ListOnlineUsers.Add(account.Username, account);
                 else
                     ListOnlineUsers[account.Username] = account;

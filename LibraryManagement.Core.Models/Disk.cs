@@ -16,5 +16,10 @@ namespace LibraryManagement.Core.Models
                 Description = Description
             };
         }
+
+        public override string GetDocumentType()
+        {
+            return "Disk";
+        }
     }
 }

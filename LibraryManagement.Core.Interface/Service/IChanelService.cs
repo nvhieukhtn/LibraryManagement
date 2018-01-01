@@ -14,5 +14,6 @@ namespace LibraryManagement.Core.Interface.Service
         Task<bool> SubscribeChanelAsync(string chanelName, string accountToken);
         Task<bool> CreateNewChanelAsync(string chanelName, string description);
         Task LoadCachedAsync();
+        Task<List<Chanels>> GetAllChanelsAsync();
     }
 }

@@ -10,6 +10,7 @@ namespace LibraryManagement.Core.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public int NumberOfSubscribes { get; set; }
         public Dictionary<string, AccountModel> ListSubscribers { get; set; }
 
         public Chanels()

@@ -10,5 +10,7 @@ namespace LibraryManagement.Core.Interface.Repository
     public interface ILibraryRepository
     {
         Task<List<Document>> GetAllDocumentsAsync();
+        Task<bool> AddDocumentAsync(Document document, Guid userId);
+        Task<bool> BorrowDocumentAsync(Guid id, Guid userId);
     }
 }
