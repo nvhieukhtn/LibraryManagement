@@ -28,6 +28,8 @@ namespace Api.Controllers
         public async Task<IHttpActionResult> AddDocumentAsync([FromBody] DocumentViewModel document)
         {
             var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
             var documentModel = LibraryFactory.CreateDocument(document.Type, document.Name, document.Description,
                 document.Author, document.Price, document.Quantity, document.Group);
             var succeed = await _libraryService.AddDocumentAsync(documentModel, permission.AccountToken);
@@ -40,6 +42,8 @@ namespace Api.Controllers
         public async Task<IHttpActionResult> BorrowAsync(Guid documentId)
         {
             var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
             var succeed = await _libraryService.BorrowDocumentAsync(documentId, permission.AccountToken);
             if (succeed)
                 return Ok();
@@ -51,6 +55,8 @@ namespace Api.Controllers
         public async Task<IHttpActionResult> ReturnAsync(Guid documentId)
         {
             var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
             var succeed = await _libraryService.ReturnDocumentAsync(documentId, permission.AccountToken);
             if (succeed)
                 return Ok();
@@ -60,11 +66,32 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAllDocumentsAsync()
         {
-            var listBooks = await _libraryService.GetAllDocumentsAsync();
-            var listViewBooks = listBooks.Select(book => new DocumentViewModel(book));
-            return Ok<IEnumerable<DocumentViewModel>>(listViewBooks);
+            var listDocuments = await _libraryService.GetAllDocumentsAsync();
+            var listViewDocuments = listDocuments.Select(document => new DocumentViewModel(document));
+            return Ok<IEnumerable<DocumentViewModel>>(listViewDocuments);
         }
 
+        [Route("BorrowedDocument")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetListBorrowedDocumentsAsync()
+        {
+            var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
+            var listDocuments = await _libraryService.GetListBorrowedDocumentsAsync(permission.AccountToken);
+            return Ok(listDocuments);
+        }
+
+        [Route("BorrowingDocument")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetListBorrowingDocumentsAsync()
+        {
+            var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
+            var listDocuments = await _libraryService.GetListBorrowingDocumentsAsync(permission.AccountToken);
+            return Ok(listDocuments);
+        }
         [Route("Update")]
         [HttpPut]
         public async Task<IHttpActionResult> UpdateDocumentInformationAsync([FromBody] DocumentViewModel document)

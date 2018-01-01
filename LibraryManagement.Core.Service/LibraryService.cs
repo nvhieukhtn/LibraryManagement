@@ -62,5 +62,21 @@ namespace LibraryManagement.Core.Service
             var succeed = await _libraryRepository.ReturnDocumentAsync(documentId, account.Id);
             return succeed;
         }
+
+        public async Task<List<BorrowedDocument>> GetListBorrowedDocumentsAsync(string accountToken)
+        {
+            var account = await _authenticationService.GetAccountInformationAsync(accountToken);
+            if (account == null)
+                return new List<BorrowedDocument>();
+            var listDocuments = await _libraryRepository.GetListBorrowedDocumentsAsync(account.Id);
+            return listDocuments;
+        }
+
+        public async Task<List<BorrowedDocument>> GetListBorrowingDocumentsAsync(string accountToken)
+        {
+            var account = await _authenticationService.GetAccountInformationAsync(accountToken);
+            var listDocuments = await _libraryRepository.GetListBorrowingDocumentsAsync(account.Id);
+            return listDocuments;
+        }
     }
 }

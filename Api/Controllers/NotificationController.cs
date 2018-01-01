@@ -35,9 +35,9 @@ namespace Api.Controllers
         [Route("CreateChanel")]
         public async Task<IHttpActionResult> CreateChanelAsync([FromBody] ChanelViewModel chanel)
         {
-            var headers = Request.Headers;
-
-            var token = headers.GetValues("Session").FirstOrDefault();
+            var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
             var succeed = await _chanelService.CreateNewChanelAsync(chanel.Name, chanel.Description);
             if(succeed)
                 return Ok();
@@ -48,10 +48,10 @@ namespace Api.Controllers
         [Route("SubscribeChanel/{chanelName}")]
         public async Task<IHttpActionResult> SubscribeChanelAsync(string chanelName)
         {
-            var headers = Request.Headers;
-
-            var token = headers.GetValues("Session").FirstOrDefault();
-            var succeed = await _chanelService.SubscribeChanelAsync(chanelName, token);
+            var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
+            var succeed = await _chanelService.SubscribeChanelAsync(chanelName, permission.AccountToken);
             if (succeed)
                 return Ok();
             return BadRequest();
@@ -61,10 +61,10 @@ namespace Api.Controllers
         [Route("PullNotification")]
         public async Task<IHttpActionResult> PullNotificationAsync()
         {
-            var headers = Request.Headers;
-
-            var token = headers.GetValues("Session").FirstOrDefault();
-            var listNotifications = await _chanelService.GetAllNotificationsAsync(token);
+            var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
+            var listNotifications = await _chanelService.GetAllNotificationsAsync(permission.AccountToken);
             return Ok(listNotifications);
         }
 
@@ -72,9 +72,9 @@ namespace Api.Controllers
         [Route("PushNotification")]
         public async Task<IHttpActionResult> PushNotificationAsync([FromBody] NotificationViewModel notification)
         {
-            var headers = Request.Headers;
-
-            var token = headers.GetValues("Session").FirstOrDefault();
+            var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
             var notificationModel = new Notification
             {
                 Content = notification.Content,

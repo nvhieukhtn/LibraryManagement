@@ -93,5 +93,67 @@ namespace LibraryManagement.Infrastructure.Repository
                 return effectRows > 0;
             }
         }
+
+        public async Task<List<BorrowedDocument>> GetListBorrowedDocumentsAsync(Guid userId)
+        {
+            var listDocuments = new List<BorrowedDocument>();
+            using (var db = DataAccessFactory.CreateDataAccess("sp_Document_GetBorrowedDocuments", DatabaseType.Read))
+            {
+                var listParams = new Dictionary<string, object>
+                {
+                    {"UserId", userId}
+                };
+                var dataReader = await db.ExecuteReaderAsync(listParams);
+                while (dataReader.Read())
+                {
+                    var name = (string)dataReader["Name"];
+                    var description = (string)dataReader["Description"];
+                    var author = (string)dataReader["Author"];
+                    
+                    var borrowedOn = (DateTime) dataReader["BorrowedOn"];
+                    var returnOn = (DateTime) dataReader["ReturnOn"];
+                    var document = new BorrowedDocument
+                    {
+                        Author = author,
+                        Name = name,
+                        Description = description,
+                        BorrowedOn = borrowedOn,
+                        ReturnOn = returnOn
+                    };
+                    listDocuments.Add(document);
+                }
+                return listDocuments;
+            }
+        }
+
+        public async Task<List<BorrowedDocument>> GetListBorrowingDocumentsAsync(Guid userId)
+        {
+            var listDocuments = new List<BorrowedDocument>();
+            using (var db = DataAccessFactory.CreateDataAccess("sp_Document_GetBorrowingDocuments", DatabaseType.Read))
+            {
+                var listParams = new Dictionary<string, object>
+                {
+                    {"UserId", userId}
+                };
+                var dataReader = await db.ExecuteReaderAsync(listParams);
+                while (dataReader.Read())
+                {
+                    var name = (string)dataReader["Name"];
+                    var description = (string)dataReader["Description"];
+                    var author = (string)dataReader["Author"];
+
+                    var borrowedOn = (DateTime)dataReader["BorrowedOn"];
+                    var document = new BorrowedDocument
+                    {
+                        Author = author,
+                        Name = name,
+                        Description = description,
+                        BorrowedOn = borrowedOn
+                    };
+                    listDocuments.Add(document);
+                }
+                return listDocuments;
+            }
+        }
     }
 }

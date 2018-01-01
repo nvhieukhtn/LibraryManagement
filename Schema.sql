@@ -324,7 +324,7 @@ BEGIN TRY
 	IF EXISTS (SELECT 1 FROM BorrowedDocument WHERE UserId = @UserId AND DocumentId = @DocumentId AND ReturnDate IS NULL)
 		BEGIN 
 			UPDATE Document SET AvailableQuantity = AvailableQuantity + 1 WHERE ID = @DocumentId
-			UPDATE BorrowedDocument SET ReturnDate = NULL WHERE UserId = @UserId AND DocumentId = @DocumentId
+			UPDATE BorrowedDocument SET ReturnDate = GETUTCDATE() WHERE UserId = @UserId AND DocumentId = @DocumentId
 		END
 COMMIT
 END TRY
@@ -342,4 +342,39 @@ AS
 BEGIN
 	SELECT * 
 	FROM Account
+END
+
+GO
+IF OBJECT_ID (N'sp_Document_GetBorrowedDocuments', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Document_GetBorrowedDocuments
+GO
+CREATE PROCEDURE sp_Document_GetBorrowedDocuments
+	@UserId UNIQUEIDENTIFIER
+AS 
+BEGIN
+	SELECT 
+		d.*,
+		bd.BorrowedDate AS 'BorrowedOn',
+		bd.ReturnDate AS 'ReturnOn'
+	FROM BorrowedDocument bd 
+		INNER JOIN Document d ON d.ID = bd.DocumentId
+	WHERE bd.UserId = @UserId 
+		AND ReturnDate IS NOT NULL
+END
+
+GO
+IF OBJECT_ID (N'sp_Document_GetBorrowingDocuments', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Document_GetBorrowingDocuments
+GO
+CREATE PROCEDURE sp_Document_GetBorrowingDocuments
+	@UserId UNIQUEIDENTIFIER
+AS 
+BEGIN
+	SELECT 
+		d.*, 
+		bd.BorrowedDate AS 'BorrowedOn'
+	FROM BorrowedDocument bd 
+		INNER JOIN Document d ON d.ID = bd.DocumentId
+	WHERE bd.UserId = @UserId 
+		AND ReturnDate IS NULL
 END
