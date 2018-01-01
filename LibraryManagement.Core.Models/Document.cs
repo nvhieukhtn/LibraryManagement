@@ -15,6 +15,7 @@ namespace LibraryManagement.Core.Models
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string UploadedBy { get; set; }
+        public int AvailableQuantity { get; set; }
         public DocumentGroup Group { get; set; }
         public abstract Document Clone();
 

@@ -12,5 +12,6 @@ namespace LibraryManagement.Core.Interface.Repository
         Task<List<Document>> GetAllDocumentsAsync();
         Task<bool> AddDocumentAsync(Document document, Guid userId);
         Task<bool> BorrowDocumentAsync(Guid id, Guid userId);
+        Task<bool> ReturnDocumentAsync(Guid documentId, Guid userId);
     }
 }

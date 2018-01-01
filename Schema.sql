@@ -256,7 +256,7 @@ CREATE PROCEDURE sp_Document_Add
 AS 
 BEGIN 
 	INSERT INTO Document (ID, Name, [Description], Author, Price, AvailableQuantity, Quantity, [Group], [Type], UploadedBy)
-	VALUES (NEWID(), @Name, @Description, @Author, @Price, 0, @Quantity, @Group, @Type, @UploadedBy)
+	VALUES (NEWID(), @Name, @Description, @Author, @Price, @Quantity, @Quantity, @Group, @Type, @UploadedBy)
 END
 	
 GO 
@@ -298,10 +298,35 @@ BEGIN
 		d.Author,
 		d.Price,
 		d.Quantity,
+		d.AvailableQuantity,
 		d.[Group],
 		d.Type,
 		UploadedBy = a.Username
 
 	FROM Document d
 		INNER JOIN Account a ON a.ID = d.UploadedBy
+END
+
+
+GO 
+IF OBJECT_ID (N'sp_Document_Return', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Document_Return
+GO
+CREATE PROCEDURE sp_Document_Return 
+	@DocumentId UNIQUEIDENTIFIER,
+	@UserId UNIQUEIDENTIFIER
+AS 
+BEGIN
+BEGIN TRAN
+BEGIN TRY
+	IF EXISTS (SELECT 1 FROM BorrowedDocument WHERE UserId = @UserId AND DocumentId = @DocumentId AND ReturnDate IS NULL)
+		BEGIN 
+			UPDATE Document SET AvailableQuantity = AvailableQuantity + 1 WHERE ID = @DocumentId
+			UPDATE BorrowedDocument SET ReturnDate = NULL WHERE UserId = @UserId AND DocumentId = @DocumentId
+		END
+COMMIT
+END TRY
+BEGIN CATCH 
+ROLLBACK
+END CATCH
 END

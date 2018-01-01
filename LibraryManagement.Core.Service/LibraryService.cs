@@ -49,10 +49,17 @@ namespace LibraryManagement.Core.Service
             return succeed;
         }
 
-        public async Task<bool> BorrowDocumentAsync(Guid id, string accountToken)
+        public async Task<bool> BorrowDocumentAsync(Guid documentId, string accountToken)
         {
             var account = await _authenticationService.GetAccountInformationAsync(accountToken);
-            var succeed = await _libraryRepository.BorrowDocumentAsync(id, account.Id);
+            var succeed = await _libraryRepository.BorrowDocumentAsync(documentId, account.Id);
+            return succeed;
+        }
+
+        public async Task<bool> ReturnDocumentAsync(Guid documentId, string accountToken)
+        {
+            var account = await _authenticationService.GetAccountInformationAsync(accountToken);
+            var succeed = await _libraryRepository.ReturnDocumentAsync(documentId, account.Id);
             return succeed;
         }
     }

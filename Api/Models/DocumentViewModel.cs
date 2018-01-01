@@ -22,12 +22,12 @@ namespace Api.Models
             
         }
 
-        public DocumentViewModel(LibraryManagement.Core.Models.Document book)
+        public DocumentViewModel(Document book)
         {
             Name = book.Name;
             Description = book.Description;
             Id = book.Id;
-            Quantity = book.Quantity;
+            Quantity = book.AvailableQuantity;
             Group = book.Group.ToString();
             Author = book.Author;
             Price = book.Price;

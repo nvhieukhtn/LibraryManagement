@@ -35,23 +35,26 @@ namespace Api.Controllers
                 return Ok();
             return BadRequest();
         }
-        [Route("Borrow/{id}")]
+        [Route("Borrow/{documentId}")]
         [HttpPost]
-        public async Task<IHttpActionResult> BorrowAsync(Guid id)
+        public async Task<IHttpActionResult> BorrowAsync(Guid documentId)
         {
             var permission = Permission.GetPermission(Request.Headers);
-            var succeed = await _libraryService.BorrowDocumentAsync(id, permission.AccountToken);
+            var succeed = await _libraryService.BorrowDocumentAsync(documentId, permission.AccountToken);
             if (succeed)
                 return Ok();
             return BadRequest();
         }
 
-        [Route("Return/{id}")]
+        [Route("Return/{documentId}")]
         [HttpPost]
-        public async Task<IHttpActionResult> ReturnAsync(Guid id)
+        public async Task<IHttpActionResult> ReturnAsync(Guid documentId)
         {
-            await Task.Delay(1000);
-            return Ok();
+            var permission = Permission.GetPermission(Request.Headers);
+            var succeed = await _libraryService.ReturnDocumentAsync(documentId, permission.AccountToken);
+            if (succeed)
+                return Ok();
+            return BadRequest();
         }
         [Route("List")]
         [HttpGet]

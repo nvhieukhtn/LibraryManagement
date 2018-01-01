@@ -25,12 +25,21 @@ namespace LibraryManagement.Infrastructure.Repository
                     var author = (string) dataReader["Author"];
                     var price = (decimal) dataReader["Price"];
                     var quantity = (int) dataReader["Quantity"];
+                    var availableQuantity = (int)dataReader["AvailableQuantity"];
                     var group = (string) dataReader["Group"];
                     var type = (string) dataReader["Type"];
                     var uploadedBy = (string) dataReader["UploadedBy"];
                     var document =
-                        LibraryFactory.CreateDocument(type, name, description, author, price, quantity, group,
-                            uploadedBy);
+                        LibraryFactory.CreateDocument(type, group);
+                    var id = (Guid) dataReader["ID"];
+                    document.Id = id;
+                    document.Author = author;
+                    document.Price = price;
+                    document.Quantity = quantity;
+                    document.AvailableQuantity = availableQuantity;
+                    document.UploadedBy = uploadedBy;
+                    document.Name = name;
+                    document.Description = description;
                     listDocuments.Add(document);
                 }
                 return listDocuments;
@@ -57,13 +66,28 @@ namespace LibraryManagement.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> BorrowDocumentAsync(Guid id, Guid userId)
+        public async Task<bool> BorrowDocumentAsync(Guid documentId, Guid userId)
         {
             using (var db = DataAccessFactory.CreateDataAccess("sp_Document_Borrow", DatabaseType.Write))
             {
                 var listParams = new Dictionary<string, object>
                 {
-                    {"Id", id}
+                    {"DocumentId", documentId},
+                    {"UserId", userId }
+                };
+                var effectRows = await db.ExecuteNonQueryAsync(listParams);
+                return effectRows > 0;
+            }
+        }
+
+        public async Task<bool> ReturnDocumentAsync(Guid documentId, Guid userId)
+        {
+            using (var db = DataAccessFactory.CreateDataAccess("sp_Document_Return", DatabaseType.Write))
+            {
+                var listParams = new Dictionary<string, object>
+                {
+                    {"DocumentId", documentId},
+                    {"UserId", userId }
                 };
                 var effectRows = await db.ExecuteNonQueryAsync(listParams);
                 return effectRows > 0;
