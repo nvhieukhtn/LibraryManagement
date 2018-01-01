@@ -1,7 +1,8 @@
 (function(){
 
 	var app = angular.module('app', []);
-	app.controller('body', ['$scope', function($scope){
+
+	app.controller('body', ['$scope', '$http', function($scope, $http){
 		$scope.role = "admin"; // Admin || user
 		$scope.template_part = "home.html"
 		$scope.changeContent = function(template_part) {
@@ -12,9 +13,13 @@
 				return (template_part.indexOf($scope.template_part) != -1) ? "active" : "";
 			return ($scope.template_part == template_part) ? "active" : "";
 		}
+		services.http = $http;
 	}]);
-	app.controller('sidebar', ['$scope', function($scope){
-		$scope.name = "okok";
+
+	app.controller('sidebar', ['$scope', '$http', function($scope, $http){
+		
 	}]);
+
+
 
 })();

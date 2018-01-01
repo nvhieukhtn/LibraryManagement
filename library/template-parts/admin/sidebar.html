@@ -33,19 +33,19 @@
 				</li>
 			</ul>
 		</li>
-		<li class="next-nav-item" ng-class="activeSidebar(['all-students.html','add-book.html'])">
+		<li class="next-nav-item" ng-class="activeSidebar(['all-students.html','add-student.html'])">
 			<a ng-click="changeContent('all-students.html')" class="next-nav-link">
 				<i class="fa fa-user fw icon" aria-hidden="true"></i>
 				<span class="next-nav-text">Quản lý sinh viên</span>
 			</a>
 			<ul class="nav-dropdown">
-				<li class="next-nav-item">
+				<li class="next-nav-item" ng-class="activeSidebar('all-students.html')">
 					<a ng-click="changeContent('all-students.html')"  class="next-nav-link">
 						<span class="next-nav-text">Tất cả sinh viên</span>
 					</a>
 				</li>
-				<li class="next-nav-item">
-					<a href="#" class="next-nav-link">
+				<li class="next-nav-item" ng-class="activeSidebar('add-student.html')">
+					<a ng-click="changeContent('add-student.html')" class="next-nav-link">
 						<span class="next-nav-text">Thêm sinh viên</span>
 					</a>
 				</li>
