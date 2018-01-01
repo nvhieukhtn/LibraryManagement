@@ -1,0 +1,61 @@
+<div id="left" ng-controller="sidebar">
+	<div class="webname"><h1>Library</h1></div>
+	<div class="search-bar">
+		<form action="">
+			<div class="search">
+				<input type="text" name="q" placeholder="Tìm kiếm sách...">
+				<i class="fa fa-search icon" aria-hidden="true"></i>
+			</div>
+		</form>
+	</div>
+	<ul id="menu-left">
+		<li class="next-nav-item" ng-class="activeSidebar('home.html')">
+			<a ng-click="changeContent('home.html')" class="next-nav-link">
+				<i class="fa fa-home fw icon" aria-hidden="true"></i>
+				<span class="next-nav-text">Quản lý chung</span>
+			</a>
+		</li>
+		<li class="next-nav-item" ng-class="activeSidebar(['all-books.html','add-book.html'])">
+			<a ng-click="changeContent('all-books.html')" class="next-nav-link">
+				<i class="fa fa-book fw icon" aria-hidden="true"></i>
+				<span class="next-nav-text">Quản lý sách</span>
+			</a>
+			<ul class="nav-dropdown">
+				<li class="next-nav-item" ng-class="activeSidebar('all-books.html')">
+					<a ng-click="changeContent('all-books.html')" class="next-nav-link">
+						<span class="next-nav-text">Tất cả sách</span>
+					</a>
+				</li>
+				<li class="next-nav-item" ng-class="activeSidebar('add-book.html')">
+					<a ng-click="changeContent('add-book.html')" class="next-nav-link">
+						<span class="next-nav-text">Thêm sách</span>
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li class="next-nav-item" ng-class="activeSidebar(['all-students.html','add-book.html'])">
+			<a ng-click="changeContent('all-students.html')" class="next-nav-link">
+				<i class="fa fa-user fw icon" aria-hidden="true"></i>
+				<span class="next-nav-text">Quản lý sinh viên</span>
+			</a>
+			<ul class="nav-dropdown">
+				<li class="next-nav-item">
+					<a ng-click="changeContent('all-students.html')"  class="next-nav-link">
+						<span class="next-nav-text">Tất cả sinh viên</span>
+					</a>
+				</li>
+				<li class="next-nav-item">
+					<a href="#" class="next-nav-link">
+						<span class="next-nav-text">Thêm sinh viên</span>
+					</a>
+				</li>
+			</ul>
+		</li>
+		<li class="next-nav-item">
+			<a href="#" class="next-nav-link">
+				<i class="fa fa-wrench fw icon" aria-hidden="true"></i>
+				<span class="next-nav-text">Cài đặt</span>
+			</a>
+		</li>
+	</ul>
+</div>
