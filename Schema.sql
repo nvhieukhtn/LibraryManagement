@@ -7,11 +7,13 @@ CREATE TABLE Account
 (
 	ID UNIQUEIDENTIFIER,
 	Username NVARCHAR(50),
+	FullName NVARCHAR(50),
 	Password NVARCHAR(50),
 	Phone NVARCHAR(50),
 	EmailAddress NVARCHAR(50),
 	Token UNIQUEIDENTIFIER,
 	Type NVARCHAR(50),
+	Role NVARCHAR(50),
 	Status int
 )
 IF OBJECT_ID (N'Document', N'U') IS NOT NULL
@@ -301,7 +303,7 @@ BEGIN
 		d.AvailableQuantity,
 		d.[Group],
 		d.Type,
-		UploadedBy = a.Username
+		UploadedBy = a.FullName
 
 	FROM Document d
 		INNER JOIN Account a ON a.ID = d.UploadedBy
@@ -329,4 +331,15 @@ END TRY
 BEGIN CATCH 
 ROLLBACK
 END CATCH
+END
+
+GO
+IF OBJECT_ID (N'sp_Account_GetAll', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Account_GetAll
+GO
+CREATE PROCEDURE sp_Account_GetAll
+AS 
+BEGIN
+	SELECT * 
+	FROM Account
 END

@@ -63,5 +63,11 @@ namespace LibraryManagement.Core.Service
             var succeed = await _authenticationRepository.DowngradeAsync(accountToken);
             return succeed;
         }
+
+        public async Task<List<AccountModel>> GetListUsersAsync()
+        {
+            var listUsers = await _authenticationRepository.GetListUsersAsync();
+            return listUsers;
+        }
     }
 }

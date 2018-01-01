@@ -15,5 +15,6 @@ namespace LibraryManagement.Core.Interface.Service
         Task<AccountModel> GetAccountInformationAsync(string token);
         Task<bool> LogoutAsync(string accountToken);
         Task<bool> DowngradeAsync(string accountToken);
+        Task<List<AccountModel>> GetListUsersAsync();
     }
 }

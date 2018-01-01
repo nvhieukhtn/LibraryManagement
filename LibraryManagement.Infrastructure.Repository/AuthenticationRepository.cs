@@ -70,7 +70,11 @@ namespace LibraryManagement.Infrastructure.Repository
                     var id = (Guid) data["Id"];
                     var username = (string) data["Username"];
                     var type = (string)data["Type"];
-                    var account = AccountModel.CreateAccount(id, username, type);
+                    var fullName = (string) data["FullName"];
+                    var account = AccountModel.CreateAccount(type);
+                    account.Id = id;
+                    account.Username = username;
+                    account.FullName = fullName;
                     return account;
                 }
                 return null;
@@ -100,6 +104,35 @@ namespace LibraryManagement.Infrastructure.Repository
                 };
                 var effectRows = await db.ExecuteNonQueryAsync(listParams);
                 return effectRows > 0;
+            }
+        }
+
+        public async Task<List<AccountModel>> GetListUsersAsync()
+        {
+            using (var db = DataAccessFactory.CreateDataAccess("sp_Account_GetAll", DatabaseType.Write))
+            {
+                var listUsers = new List<AccountModel>();
+                var listParams = new Dictionary<string, object>();
+                var dataReader = await db.ExecuteReaderAsync(listParams);
+                while (dataReader.Read())
+                {
+                    var id = (Guid)dataReader["Id"];
+                    var username = (string)dataReader["Username"];
+                    var fullName = (string) dataReader["FullName"];
+                    var type = (string)dataReader["Type"];
+                    var role = (string) dataReader["Role"];
+                    var email = (string) dataReader["EmailAddress"];
+                    var phone = (string) dataReader["Phone"];
+                    var account = AccountModel.CreateAccount(type);
+                    account.Id = id;
+                    account.Username = username;
+                    account.FullName = fullName;
+                    account.Role = role;
+                    account.EmailAddress = email;
+                    account.Phone = phone;
+                    listUsers.Add(account);
+                }
+                return listUsers;
             }
         }
     }

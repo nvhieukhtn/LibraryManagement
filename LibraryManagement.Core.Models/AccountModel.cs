@@ -13,7 +13,9 @@ namespace LibraryManagement.Core.Models
         public string EmailAddress { get; set; }
         public string Phone { get; set; }
         public string Token { get; set; }
+        public string FullName { get; set; }
         public BaseAccountState AccountState { get; set; }
+        public string Role { get; set; }
 
 
         public AccountModel()
@@ -30,13 +32,9 @@ namespace LibraryManagement.Core.Models
             return string.Empty;
         }
 
-        public static AccountModel CreateAccount(Guid id, string username, string type)
+        public static AccountModel CreateAccount(string type)
         {
-            var account = new AccountModel
-            {
-                Id = id,
-                Username = username
-            };
+            var account = new AccountModel();
             switch (type)
             {
                 case "Normal":

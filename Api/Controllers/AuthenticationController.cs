@@ -54,6 +54,16 @@ namespace Api.Controllers
             return BadRequest();
         }
 
+        [Route("List")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetListUsersAsync()
+        {
+            var permission = Permission.GetPermission(Request.Headers);
+            var listUsers = await _authenticationService.GetListUsersAsync();
+            var listViewUsers = listUsers.Select(user => new AccountViewModel(user));
+            return Ok(listViewUsers);
+        }
+
         [Route("UpgradeVIP")]
         [HttpPut]
         public async Task<IHttpActionResult> UpgradeVIPAsync()
