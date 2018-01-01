@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<title>Library Books</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<script type="text/javascript" src="scripts/vendor/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="scripts/vendor/angular.js"></script>
+	<script type="text/javascript" src="scripts/vendor/bootstrap.min.js"></script>
+	<script type="text/javascript" src="scripts/app.js"></script>
+</head>
+<body ng-controller="body">
+	<div class="wrap">
+		<div ng-include="'template-parts/'+role+'/sidebar.html'"></div>
+		<div ng-include="'template-parts/'+role+'/'+template_part"></div>
+	</div>
+	
+</body>
+</html>
