@@ -1,4 +1,4 @@
-<div id="content">
+<div id="content" ng-controller="home">
 	<div class="pageheader">
 		<div class="breadcrumb-new"><i class="fa fa-home fw icon" aria-hidden="true"></i> <span class="text">Quản lý chung</span></div>
 		<div class="header-secondary">
@@ -32,26 +32,12 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>BO_001</td>
-							<td>KTPM</td>
-							<td>Nguyễn Văn Huy</td>
-							<td>20/12/2017</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>BO_001</td>
-							<td>KTPM</td>
-							<td>Nguyễn Văn Huy</td>
-							<td>20/12/2017</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>BO_001</td>
-							<td>KTPM</td>
-							<td>Nguyễn Văn Huy</td>
-							<td>20/12/2017</td>
+						<tr ng-repeat="rentedBookInfo in rentedBooksInfo">
+							<td>{{$index + 1}}</td>
+							<td>{{rentedBookInfo.id}}</td>
+							<td>{{rentedBookInfo.bookName}}</td>
+							<td>{{rentedBookInfo.renter}}</td>
+							<td>{{rentedBookInfo.date}}</td>
 						</tr>
 					</tbody>
 				</table>

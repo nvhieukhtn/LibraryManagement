@@ -1,4 +1,4 @@
-<div id="content">
+<div id="content" ng-controller="all-books">
 	<div class="pageheader">
 		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý sách</span></div>
 		<div class="header-secondary">
@@ -44,35 +44,14 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
+						<tr ng-repeat="book in allBooks">
 							<td><input type="checkbox" name="checkall"></td>
-							<td>BO_001</td>
-							<td>KTPM</td>
-							<td>Nguyễn Văn Huy</td>
-							<td>10</td>
+							<td>{{book.id}}</td>
+							<td>{{book.name}}</td>
+							<td>{{book.author}}</td>
+							<td>{{book.quantity}}</td>
 							<td>
-								<button class="btn btn-success">Sửa</button>
-								<button class="btn btn-danger">Xóa</button>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" name="checkall"></td>
-							<td>BO_001</td>
-							<td>KTPM</td>
-							<td>Nguyễn Văn Huy</td>
-							<td>10</td>
-							<td>
-								<button class="btn btn-success">Sửa</button>
-								<button class="btn btn-danger">Xóa</button>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="checkbox" name="checkall"></td>
-							<td>BO_001</td>
-							<td>KTPM</td>
-							<td>Nguyễn Văn Huy</td>
-							<td>10</td>
-							<td>
+								<button class="btn btn-info">Chi tiết</button>
 								<button class="btn btn-success">Sửa</button>
 								<button class="btn btn-danger">Xóa</button>
 							</td>
@@ -80,7 +59,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="text-center"><button class="btn btn-info">Xem thêm...</button></div>
+			<div class="text-center" ng-show="hasViewMore"><button class="btn btn-info" ng-click="viewMore()">Xem thêm...</button></div>
 		</div>
 		
 	</div>

@@ -20,6 +20,43 @@
 		
 	}]);
 
+	app.controller('home', ['$scope', function($scope){
+		$scope.rentedBooksInfo = [];
+		services.getBookRented({
+			quantity: 10,		// Số lượng sách hiển thị (default: 10)
+			offset: 0,			// Số lượng sách bỏ qua (default: 0)
+			selects: [ 'id', 'bookName', 'renter', 'date' ]
+		},function(data){
+			$scope.rentedBooksInfo = data;
+		});
+	}]);
 
+	app.controller('all-books', ['$scope', function($scope){
+		$scope.allBooks = [];
+		$scope.hasViewMore = true;
+		var quantity = 10;
+		var offset = 0;
+		services.getBooks({
+			quantity: quantity,		// Số lượng sách hiển thị (default: 10)
+			offset: offset,			// Số lượng sách bỏ qua (default: 0)
+			selects: [ 'id', 'name', 'author', 'quantity' ]
+		}, function(data){
+			$scope.hasViewMore = data.length >= quantity;
+			$scope.allBooks = data;
+			offset += data.length;
+		});
+
+		$scope.viewMore = function () {
+			services.getBooks({
+				quantity: quantity,		// Số lượng sách hiển thị (default: 10)
+				offset: offset,			// Số lượng sách bỏ qua (default: 0)
+				selects: [ 'id', 'name', 'author', 'quantity' ]
+			}, function(data){
+				$scope.hasViewMore = data.length >= quantity;
+				$scope.allBooks = $scope.allBooks.concat(data);
+				offset += data.length;
+			});
+		}
+	}])
 
 })();
