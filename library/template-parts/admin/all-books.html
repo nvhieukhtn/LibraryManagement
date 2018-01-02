@@ -18,9 +18,9 @@
 			<h1 class="main-title">Tất cả sách</h1>
 			<div class="filter">
 				<div class="pull-left">
-					<button class="btn btn-default active">Tất cả (100)</button>
-					<button class="btn btn-default">Còn (90)</button>
-					<button class="btn btn-default">Đã hết (10)</button>
+					<button class="btn btn-default" ng-class="activeFilter('all')" ng-click="filter('all')">Tất cả (100)</button>
+					<button class="btn btn-default" ng-class="activeFilter('in')" ng-click="filter('in')">Còn (90)</button>
+					<button class="btn btn-default" ng-class="activeFilter('out')" ng-click="filter('out')">Đã hết (10)</button>
 				</div>
 				<div class="pull-right">
 					<input type="text" name="q" class="form-control" placeholder="Tìm kiếm">
@@ -31,7 +31,7 @@
 					<thead>
 						<tr>
 							<th class="select-all">
-								<input type="checkbox" name="checkall">
+								<input type="checkbox" name="checkall" ng-model="checkAll" ng-change="checkAllBooks()" >
 								<div class="action">
 									<button class="btn btn-danger">Xóa tất cả</button>
 								</div>
@@ -45,14 +45,14 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="book in allBooks">
-							<td><input type="checkbox" name="checkall"></td>
+							<td><input type="checkbox" ng-model="book.checked"></td>
 							<td>{{book.id}}</td>
 							<td>{{book.name}}</td>
 							<td>{{book.author}}</td>
 							<td>{{book.quantity}}</td>
 							<td>
 								<button class="btn btn-info">Chi tiết</button>
-								<button class="btn btn-success">Sửa</button>
+								<button class="btn btn-success" ng-click="changeContent('edit-book.html')">Sửa</button>
 								<button class="btn btn-danger">Xóa</button>
 							</td>
 						</tr>

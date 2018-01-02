@@ -63,3 +63,5 @@ textarea { resize: vertical; }
 #content .filter { overflow: auto; width: 100%; margin-bottom: 20px; }
 #content .input-content { overflow: hidden; }
 #content .add-new .form-group { overflow: auto; }
+.has-add-more { display: flex; margin-bottom: 10px; }
+.has-add-more .remove-me { background-color: #da4f49; color: #fff; }
