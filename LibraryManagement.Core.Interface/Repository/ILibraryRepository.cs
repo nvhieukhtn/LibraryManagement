@@ -9,11 +9,12 @@ namespace LibraryManagement.Core.Interface.Repository
 {
     public interface ILibraryRepository
     {
-        Task<List<Document>> GetAllDocumentsAsync();
+        Task<List<Document>> GetDocumentsAsync(string type);
         Task<bool> AddDocumentAsync(Document document, Guid userId);
         Task<bool> BorrowDocumentAsync(Guid id, Guid userId);
         Task<bool> ReturnDocumentAsync(Guid documentId, Guid userId);
         Task<List<BorrowedDocument>> GetListBorrowedDocumentsAsync(Guid userId);
         Task<List<BorrowedDocument>> GetListBorrowingDocumentsAsync(Guid userId);
+        Task<List<BorrowedDocument>> GetListRecentBorrowedDocumentsAsync();
     }
 }

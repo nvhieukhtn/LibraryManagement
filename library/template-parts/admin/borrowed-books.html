@@ -1,0 +1,50 @@
+<div id="content" ng-controller="borrowed-books">
+	<div class="pageheader">
+		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý sách</span></div>
+		<div class="header-secondary">
+			<div class="group-btn">
+				<button class="btn btn-default">Cho thuê</button>
+				<button class="btn btn-default">Trả sách</button>
+			</div>
+		</div>
+		<div class="header-primary">
+			<div class="group-btn">
+				<button  ng-click="changeContent('add-book.html')" class="btn btn-primary">Thêm sách</button>
+			</div>
+		</div>
+	</div>
+	<div class="one-row-actions">
+		<div class="box-content">
+			<h1 class="main-title">Danh sách tài liệu đang mượn</h1>
+			<div class="table-responsive">          
+				<table class="table cell-middle">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Tên tài liệu</th>
+							<th>Tác giả</th>
+							<th>Ngày mượn</th>
+							<th>Nhóm</th>
+							<th>Loại</th>
+							<th class="text-right">&nbsp</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="book in allBooks">
+							<td>{{$index + 1}}</td>
+							<td>{{book.Name}}</td>
+							<td>{{book.Author}}</td>
+							<td>{{book.BorrowedOn | date}}</td>
+							<td>{{book.GroupName}}</td>
+							<td>{{book.Type}}</td>
+							<td class="text-right">
+								<button class="btn btn-primary" ng-click="Return(book.Id)">Trả tài liệu</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</div>

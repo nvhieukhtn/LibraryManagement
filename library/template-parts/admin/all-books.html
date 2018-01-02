@@ -9,7 +9,7 @@
 		</div>
 		<div class="header-primary">
 			<div class="group-btn">
-				<button class="btn btn-primary">Thêm sách</button>
+				<button  ng-click="changeContent('add-book.html')" class="btn btn-primary">Thêm sách</button>
 			</div>
 		</div>
 	</div>
@@ -18,9 +18,9 @@
 			<h1 class="main-title">Tất cả sách</h1>
 			<div class="filter">
 				<div class="pull-left">
-					<button class="btn btn-default" ng-class="activeFilter('all')" ng-click="filter('all')">Tất cả (100)</button>
-					<button class="btn btn-default" ng-class="activeFilter('in')" ng-click="filter('in')">Còn (90)</button>
-					<button class="btn btn-default" ng-class="activeFilter('out')" ng-click="filter('out')">Đã hết (10)</button>
+					<button class="btn btn-default" ng-class="activeFilter('All')" ng-click="filter('All')">Tất cả <span ng-show="filterActive == 'All'">({{allBooks.length}})</span></button>
+					<button class="btn btn-default" ng-class="activeFilter('Available')" ng-click="filter('Available')">Có sẵn <span ng-show="filterActive == 'Available'">({{allBooks.length}})</span></button>
+					<button class="btn btn-default" ng-class="activeFilter('OutOfStock')" ng-click="filter('OutOfStock')">Đã hết <span ng-show="filterActive == 'OutOfStock'">({{allBooks.length}})</span></button>
 				</div>
 				<div class="pull-right">
 					<input type="text" name="q" class="form-control" placeholder="Tìm kiếm">
@@ -30,27 +30,25 @@
 				<table class="table cell-middle">
 					<thead>
 						<tr>
-							<th class="select-all">
-								<input type="checkbox" name="checkall" ng-model="checkAll" ng-change="checkAllBooks()" >
-								<div class="action">
-									<button class="btn btn-danger">Xóa tất cả</button>
-								</div>
-							</th>
-							<th>Mã</th>
-							<th>Tên sách</th>
+							<th>#</th>
+							<th>Tên tài liệu</th>
 							<th>Tác giả</th>
-							<th>Số lượng còn</th>
-							<th>Hành động</th>
+							<th>Số lượng</th>
+							<th>Nhóm</th>
+							<th>Loại</th>
+							<th class="text-right">Hành động</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="book in allBooks">
-							<td><input type="checkbox" ng-model="book.checked"></td>
-							<td>{{book.id}}</td>
-							<td>{{book.name}}</td>
-							<td>{{book.author}}</td>
-							<td>{{book.quantity}}</td>
-							<td>
+							<td>{{$index + 1}}</td>
+							<td>{{book.Name}}</td>
+							<td>{{book.Author}}</td>
+							<td>{{book.Quantity}}</td>
+							<td>{{book.Group}}</td>
+							<td>{{book.Type}}</td>
+							<td class="text-right">
+								<button ng-show="book.Quantity > 0" class="btn btn-primary" ng-click="Borrow(book.Id)">Mượn</button>
 								<button class="btn btn-info">Chi tiết</button>
 								<button class="btn btn-success" ng-click="changeContent('edit-book.html', {bookID: book.id})">Sửa</button>
 								<button class="btn btn-danger">Xóa</button>
@@ -59,7 +57,6 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="text-center" ng-show="hasViewMore"><button class="btn btn-info" ng-click="viewMore()">Xem thêm...</button></div>
 		</div>
 		
 	</div>

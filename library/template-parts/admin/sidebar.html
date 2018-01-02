@@ -15,30 +15,25 @@
 				<span class="next-nav-text">Quản lý chung</span>
 			</a>
 		</li>
-		<li class="next-nav-item" ng-class="activeSidebar(['all-books.html','add-book.html','all-book-type.html', 'all-book-group.html', 'edit-book.html'])">
+		<li class="next-nav-item" ng-class="activeSidebar(['all-books.html','add-book.html','borrowed-books.html', 'edit-book.html'])">
 			<a ng-click="changeContent('all-books.html')" class="next-nav-link">
 				<i class="fa fa-book fw icon" aria-hidden="true"></i>
-				<span class="next-nav-text">Quản lý sách</span>
+				<span class="next-nav-text">Quản lý tài liệu</span>
 			</a>
 			<ul class="nav-dropdown">
 				<li class="next-nav-item" ng-class="activeSidebar('all-books.html')">
 					<a ng-click="changeContent('all-books.html')" class="next-nav-link">
-						<span class="next-nav-text">Tất cả sách</span>
+						<span class="next-nav-text">Tất cả tài liệu</span>
+					</a>
+				</li>
+				<li class="next-nav-item" ng-class="activeSidebar('borrowed-books.html')">
+					<a ng-click="changeContent('borrowed-books.html')" class="next-nav-link">
+						<span class="next-nav-text">Tài liệu đang mượn</span>
 					</a>
 				</li>
 				<li class="next-nav-item" ng-class="activeSidebar('add-book.html')">
 					<a ng-click="changeContent('add-book.html')" class="next-nav-link">
-						<span class="next-nav-text">Thêm sách</span>
-					</a>
-				</li>
-				<li class="next-nav-item" ng-class="activeSidebar('all-book-type.html')">
-					<a ng-click="changeContent('all-book-type.html')" class="next-nav-link">
-						<span class="next-nav-text">Loại sách</span>
-					</a>
-				</li>
-				<li class="next-nav-item" ng-class="activeSidebar('all-book-group.html')">
-					<a ng-click="changeContent('all-book-group.html')" class="next-nav-link">
-						<span class="next-nav-text">Nhóm sách</span>
+						<span class="next-nav-text">Thêm tài liệu</span>
 					</a>
 				</li>
 			</ul>

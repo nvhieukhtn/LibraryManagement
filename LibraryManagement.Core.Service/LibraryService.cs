@@ -22,9 +22,9 @@ namespace LibraryManagement.Core.Service
             _chanelService = chanelService;
         }
 
-        public async Task<List<Document>> GetAllDocumentsAsync()
+        public async Task<List<Document>> GetDocumentsAsync(string type)
         {
-            var listDocuments = await _libraryRepository.GetAllDocumentsAsync();
+            var listDocuments = await _libraryRepository.GetDocumentsAsync(type);
             return listDocuments;
         }
 
@@ -76,6 +76,12 @@ namespace LibraryManagement.Core.Service
         {
             var account = await _authenticationService.GetAccountInformationAsync(accountToken);
             var listDocuments = await _libraryRepository.GetListBorrowingDocumentsAsync(account.Id);
+            return listDocuments;
+        }
+
+        public async Task<List<BorrowedDocument>> GetListRecentBorrowedDocumentsAsync()
+        {
+            var listDocuments = await _libraryRepository.GetListRecentBorrowedDocumentsAsync();
             return listDocuments;
         }
     }

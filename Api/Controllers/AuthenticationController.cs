@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Api.Models;
 using LibraryManagement.Core.Interface.Service;
 using LibraryManagement.Core.Models;
@@ -13,6 +14,7 @@ using Unity;
 namespace Api.Controllers
 {
     [RoutePrefix("Authentication")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class AuthenticationController : ApiController
     {
         private readonly IAuthenticationService _authenticationService;

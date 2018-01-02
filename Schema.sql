@@ -272,7 +272,7 @@ AS
 BEGIN
 BEGIN TRAN
 BEGIN TRY
-	IF EXISTS (SELECT 1 FROM Document WHERE AvailableQuantity > 0 AND ID = @DocumentId)
+	IF EXISTS (SELECT 1 FROM Document WHERE AvailableQuantity > 0 AND ID = @DocumentId) AND NOT EXISTS (SELECT 1 FROM BorrowedDocument WHERE UserId = @UserId AND DocumentId = @DocumentId AND ReturnDate IS NULL)
 		BEGIN 
 			UPDATE Document SET AvailableQuantity = AvailableQuantity - 1 WHERE ID = @DocumentId
 			INSERT INTO BorrowedDocument (ID, UserId, DocumentId, ReturnDate, BorrowedDate)
@@ -291,6 +291,7 @@ IF OBJECT_ID (N'sp_Document_GetAll', N'P') IS NOT NULL
 GO
 
 CREATE PROCEDURE sp_Document_GetAll
+	@type nvarchar(50)
 AS 
 BEGIN
 	SELECT 
@@ -307,6 +308,10 @@ BEGIN
 
 	FROM Document d
 		INNER JOIN Account a ON a.ID = d.UploadedBy
+	WHERE 
+		@type = 'ALL' 
+		OR (@type = 'OutOfStock' AND d.AvailableQuantity = 0)
+		OR (@type = 'Available' AND d.AvailableQuantity > 0)
 END
 
 
@@ -314,7 +319,7 @@ GO
 IF OBJECT_ID (N'sp_Document_Return', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Document_Return
 GO
-CREATE PROCEDURE sp_Document_Return 
+CREATE PROCEDURE sp_Document_Return
 	@DocumentId UNIQUEIDENTIFIER,
 	@UserId UNIQUEIDENTIFIER
 AS 
@@ -377,4 +382,20 @@ BEGIN
 		INNER JOIN Document d ON d.ID = bd.DocumentId
 	WHERE bd.UserId = @UserId 
 		AND ReturnDate IS NULL
+END
+
+GO
+IF OBJECT_ID (N'sp_Document_GetRecentBorrowedDocuments', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Document_GetRecentBorrowedDocuments
+GO
+CREATE PROCEDURE sp_Document_GetRecentBorrowedDocuments
+AS 
+BEGIN
+	SELECT TOP 10
+		d.*, 
+		bd.BorrowedDate AS 'BorrowedOn',
+		bd.ReturnDate AS 'ReturnOn'
+	FROM BorrowedDocument bd 
+		INNER JOIN Document d ON d.ID = bd.DocumentId
+	ORDER BY bd.BorrowedDate DESC
 END

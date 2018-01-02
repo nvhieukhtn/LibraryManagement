@@ -1,26 +1,26 @@
 <div id="content" ng-controller="add-book">
 	<div class="pageheader">
-		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý sách / Thêm sách</span></div>
+		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý tài liệu / Thêm tài liệu</span></div>
 		<div class="header-secondary">
 			<div class="group-btn">
 				<button class="btn btn-default">Cho thuê</button>
-				<button class="btn btn-default">Trả sách</button>
+				<button class="btn btn-default">Trả tài liệu</button>
 			</div>
 		</div>
 		<div class="header-primary">
 			<div class="group-btn">
-				<button class="btn btn-primary">Thêm sách</button>
+				<button ng-click="changeContent('add-book.html')" class="btn btn-primary">Thêm tài liệu</button>
 			</div>
 		</div>
 	</div>
 	<div class="one-row-actions">
 		<div class="box-content">
-			<h1 class="main-title">Thêm sách</h1>
+			<h1 class="main-title">Thêm tài liệu</h1>
 			<div class="input-content add-new">
 				<div class="row">
 					<div class="form-group">
 						<div class="col-sm-3 text-right">
-							<label>Tên sách:</label>
+							<label>Tên tài liệu:</label>
 						</div>
 						<div class="col-sm-9">
 							<input type="text" name="name" class="form-control" ng-model="name">
@@ -60,26 +60,19 @@
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3 text-right">
-							<label>Loại sách:</label>
+							<label>Loại tài liệu:</label>
 						</div>
 						<div class="col-sm-9">
-							<div class="has-add-more" ng-repeat="type in types">
-								<select class="form-control" ng-model="types[$index].id" ng-options="typeOption.id as typeOption.name for typeOption in typesOption" ng-change="showAllType()">
-								</select>
-								<button id="b1" class="btn add-more" ng-class="typeAddMoreClass($index)" ng-click="add_DelMoreType($index)" type="button">{{typeAddMoreIcon($index)}}</button>
-							</div>
+							<input type="text" name="name" class="form-control" ng-model="type">
+						</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3 text-right">
-							<label>Nhóm sách:</label>
+							<label>Nhóm tài liệu:</label>
 						</div>
 						<div class="col-sm-9">
-							<div class="has-add-more" ng-repeat="group in groups">
-								<select class="form-control" ng-model="groups[$index].id" ng-options="groupOption.id as groupOption.name for groupOption in groupsOption" ng-change="showAllGroup()">
-								</select>
-								<button id="b1" class="btn add-more" ng-class="groupAddMoreClass($index)" ng-click="add_DelMoreGroup($index)" type="button">{{groupAddMoreIcon($index)}}</button>
-							</div>
+							<input type="text" name="name" class="form-control" ng-model="group">
 						</div>
 					</div>
 				</div>

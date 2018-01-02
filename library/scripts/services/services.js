@@ -88,54 +88,24 @@ var services = new function() {
 	*/
 	/******************************************************/
 	this.getBookRented = function(args, callback=false){
-		// methodGetBasic("", args, callback);
-		if (callback) callback([
-				{
-					id: "BO_001",
-					bookName: "KTPM",
-					renter: "Nguyễn Văn Huy",
-					date: "20/12/2017"
-				},
-				{
-					id: "BO_002",
-					bookName: "LTHDT",
-					renter: "Nguyễn Văn Hiếu",
-					date: "20/12/2017"
-				},
-				{
-					id: "BO_003",
-					bookName: "KTPM",
-					renter: "Nguyễn Văn Huy",
-					date: "20/12/2017"
-				},
-				{
-					id: "BO_004",
-					bookName: "LTHDT",
-					renter: "Nguyễn Văn Hiếu",
-					date: "20/12/2017"
-				},
-				{
-					id: "BO_005",
-					bookName: "KTPM",
-					renter: "Nguyễn Văn Huy",
-					date: "20/12/2017"
-				},
-				{
-					id: "BO_006",
-					bookName: "KTPM",
-					renter: "Nguyễn Văn Hiếu",
-					date: "20/12/2017"
-				}
-			])
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		this.http.get('http://localhost:50371/Library/RecentBorrowedDocument',config)
+			.then(function(response){
+				if(callback) callback(response.data);
+			}, function(error){
+				if(callback) callback('[]');
+			});
 	}
 
 	/******************************************************/
 	/******************   Lấy danh sách sách   ****************/
 	/*	Input
 	args = {
-		quantity: number		// Số lượng sách hiển thị (default: 10) và -1 là tất cả
-		offset: number			// Số lượng sách bỏ qua (default: 0)
-		selects: array			// Các trường cần trả về (default: [])
+		type: ['All', 'Available', 'OutOfStock']
 	}
 	Tại server $_GET['quantity'], ...
 	*/
@@ -146,303 +116,61 @@ var services = new function() {
 	*/
 	/******************************************************/
 	this.getBooks = function(args, callback=false){
-		// methodGetBasic("", args, callback);
-		if (callback) callback([
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_002",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_003",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_004",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "0"
-				},
-				{
-					id: "BO_005",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "12"
-				},
-				{
-					id: "BO_006",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_007",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_008",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_009",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_010",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				}
-			])
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		this.http.get('http://localhost:50371/Library/List?type=' + args.type, config)
+			.then(function(response){
+				if(callback) callback(response.data);
+			}, function(error){
+				if(callback) callback('[]');
+			});
+	}
+	this.getBorrowedBooks = function(args, callback=false){
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		this.http.get('http://localhost:50371/Library/BorrowingDocument', config)
+			.then(function(response){
+				if(callback) callback(response.data);
+			}, function(error){
+				if(callback) callback('[]');
+			});
+	}
+	this.borrowDocument = function(args, callback=false){
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		var data = {};
+		this.http.post('http://localhost:50371/Library/Borrow/' + args.id,data, config)
+		.then(function(response){
+				if(callback) callback(true);
+			}, function(error){
+				if(callback) callback(false);
+			});
 	}
 
-	/******************************************************/
-	/******************   Lấy danh sách sách đã hết   ****************/
-	/*	Input
-	args = {
-		quantity: number		// Số lượng sách hiển thị (default: 10) và -1 là tất cả
-		offset: number			// Số lượng sách bỏ qua (default: 0)
-		selects: array			// Các trường cần trả về (default: [])
+	
+	this.returnDocument = function(args, callback=false){
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		var data = {};
+		this.http.post('http://localhost:50371/Library/Return/' + args.id,data, config)
+		.then(function(response){
+				if(callback) callback(true);
+			}, function(error){
+				if(callback) callback(false);
+			});
 	}
-	Tại server $_GET['quantity'], ...
-	*/
-	/*	Output
-		Thành công
-			callback(data)	// data là danh sách các trừng được filter
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
-	this.getOutOfBooks = function(args, callback=false){
-		// methodGetBasic("", args, callback);
-		if (callback) callback([
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "0"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "12"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				}
-			])
-	}
-
-	/******************************************************/
-	/******************   Lấy danh sách sách còn trong kho   ****************/
-	/*	Input
-	args = {
-		quantity: number		// Số lượng sách hiển thị (default: 10) và -1 là tất cả
-		offset: number			// Số lượng sách bỏ qua (default: 0)
-		selects: array			// Các trường cần trả về (default: [])
-	}
-	Tại server $_GET['quantity'], ...
-	*/
-	/*	Output
-		Thành công
-			callback(data)	// data là danh sách các trừng được filter
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
-	this.getBooksHasStock = function(args, callback=false){
-		// methodGetBasic("", args, callback);
-		if (callback) callback([
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "0"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "12"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				},
-				{
-					id: "BO_001",
-					name: "KTPM",
-					author: "Nguyễn Văn Huy",
-					quantity: "1"
-				}
-			])
-	}
-
-	/******************************************************/
-	/******************   Lấy danh sách loại sách   ****************/
-	/*	Input
-	args = {
-		quantity: number		// Số lượng sách hiển thị (default: 10) và -1 là tất cả
-		offset: number			// Số lượng sách bỏ qua (default: 0)
-		selects: array			// Các trường cần trả về (default: [])
-	}
-	Tại server $_GET['quantity'], ...
-	*/
-	/*	Output
-		Thành công
-			callback(data)	// data là danh sách các trừng được filter
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
-	this.getAllTypesBook = function(args, callback=false){
-		// methodGetBasic("", args, callback);
-		if (callback) callback([
-				{
-					id: "TY_001",
-					name: "Báo"
-				},
-				{
-					id: "TY_002",
-					name: "Sách"
-				},
-				{
-					id: "TY_003",
-					name: "Tạp chí"
-				}
-			])
-	}
-
-	/******************************************************/
-	/******************   Lấy danh sách nhóm sách   ****************/
-	/*	Input
-	args = {
-		quantity: number		// Số lượng sách hiển thị (default: 10) và -1 là tất cả
-		offset: number			// Số lượng sách bỏ qua (default: 0)
-		selects: array			// Các trường cần trả về (default: [])
-	}
-	Tại server $_GET['quantity'], ...
-	*/
-	/*	Output
-		Thành công
-			callback(data)	// data là danh sách các trừng được filter
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
-	this.getAllGroupsBook = function(args, callback=false){
-		// methodGetBasic("", args, callback);
-		if (callback) callback([
-				{
-					id: "GR_001",
-					name: "Khoa học"
-				},
-				{
-					id: "GR_002",
-					name: "Vui nhôn"
-				},
-				{
-					id: "GR_003",
-					name: "Hành động"
-				}
-			])
-	}
-
 	/******************************************************/
 	/******************   Lấy danh sách nhóm sách   ****************/
 	/*	Input
@@ -464,11 +192,18 @@ var services = new function() {
 	*/
 	/******************************************************/
 	this.addBook = function(args, callback=false){
-		// methodPostBasic("", args, callback);
-		console.log("Thêm sách:");
-		console.log(args);
-		// methodGetBasic("", args, callback);
-		if (callback) callback(true)
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		this.http.post('http://localhost:50371/Library/Add',args, config)
+		.then(function(response){
+				if (callback) callback(true)
+			}, function(error){
+				if (callback) callback(false)
+			});
+		
 	}
 
 	/******************************************************/

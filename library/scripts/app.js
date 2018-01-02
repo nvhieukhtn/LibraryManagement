@@ -14,15 +14,16 @@
 				return (template_part.indexOf($scope.template_part) != -1) ? "active" : "";
 			return ($scope.template_part == template_part) ? "active" : "";
 		}
+		sessionStorage.Session = 'e3907d15-0d1e-45e3-906f-0cf0c141abe5';
 		services.http = $http;
 	}]);
 
 	app.controller('sidebar', ['$scope', '$http', function($scope, $http){
 		
 	}]);
-
 	app.controller('home', ['$scope', function($scope){
 		$scope.rentedBooksInfo = [];
+		
 		services.getBookRented({
 			quantity: 10,		// Số lượng sách hiển thị (default: 10)
 			offset: 0,			// Số lượng sách bỏ qua (default: 0)
@@ -31,77 +32,67 @@
 			$scope.rentedBooksInfo = data;
 		});
 	}]);
-
+	
 	app.controller('all-books', ['$scope', function($scope){
 		$scope.allBooks = [];
-		$scope.hasViewMore = true;
-		$scope.checkAll = false;
 
-		var filterActive = 'all';
-		var quantity = 10;
-		var offset = 0;
 
+		$scope.filterActive = 'All';
 		$scope.activeFilter = function(name){
-			return (name == filterActive) ? "active" : "";
+			return (name == $scope.filterActive) ? "active" : "";
+		}
+		
+		$scope.Borrow = function(id){
+			services.borrowDocument({
+				id: id
+			}, function(success){
+				if (success)
+						bootbox.alert("Mượn thành công");
+					else bootbox.alert("Mượn thất bại");
+				$scope.load();
+			});
 		}
 
 		$scope.filter = function(name){
-			filterActive = name;
+			$scope.filterActive = name;
 			$scope.allBooks = [];
-			$scope.viewMore();
+			$scope.load();
 		}
 
-		$scope.viewMore = function () {
-			if (filterActive == "all"){
-				services.getBooks({
-					quantity: quantity,		// Số lượng sách hiển thị (default: 10)
-					offset: offset,			// Số lượng sách bỏ qua (default: 0)
-					selects: [ 'id', 'name', 'author', 'quantity' ]
+		$scope.load = function () {
+			services.getBooks({
+					type: $scope.filterActive
 				}, function(data){
-					for (var i = data.length - 1; i >= 0; i--) {
-						data[i]['checked'] = false;
-					}
-					$scope.hasViewMore = data.length >= quantity;
-					$scope.allBooks = $scope.allBooks.concat(data);
-					offset += data.length;
+					$scope.allBooks = data;
 				});
-			} else if (filterActive == "out"){
-				services.getOutOfBooks({
-					quantity: quantity,		// Số lượng sách hiển thị (default: 10)
-					offset: offset,			// Số lượng sách bỏ qua (default: 0)
-					selects: [ 'id', 'name', 'author', 'quantity' ]
-				}, function(data){
-					for (var i = data.length - 1; i >= 0; i--) {
-						data[i]['checked'] = false;
-					}
-					$scope.hasViewMore = data.length >= quantity;
-					$scope.allBooks = $scope.allBooks.concat(data);
-					offset += data.length;
-				});
-			} else if (filterActive == "in") {
-				services.getBooksHasStock({
-					quantity: quantity,		// Số lượng sách hiển thị (default: 10)
-					offset: offset,			// Số lượng sách bỏ qua (default: 0)
-					selects: [ 'id', 'name', 'author', 'quantity' ]
-				}, function(data){
-					for (var i = data.length - 1; i >= 0; i--) {
-						data[i]['checked'] = false;
-					}
-					$scope.hasViewMore = data.length >= quantity;
-					$scope.allBooks = $scope.allBooks.concat(data);
-					offset += data.length;
-				});
-			}
 		}
-		$scope.viewMore();
-
-		$scope.checkAllBooks = function(){
-			for (var i = $scope.allBooks.length - 1; i >= 0; i--) {
-				$scope.allBooks[i]['checked'] = $scope.checkAll;
-			}
-		}
+		$scope.load();
 	}])
 
+	
+	app.controller('borrowed-books', ['$scope', function($scope){
+		$scope.allBooks = [];
+
+		
+		$scope.Return = function(id){
+			services.returnDocument({
+				id: id
+			}, function(success){
+				if (success)
+						bootbox.alert("Trả tài liệu thành công");
+					else bootbox.alert("Trả tài liệu thất bại");
+				$scope.load();
+			});
+		}
+
+		$scope.load = function () {
+			services.getBorrowedBooks({
+				}, function(data){
+					$scope.allBooks = data;
+				});
+		}
+		$scope.load();
+	}])
 	app.controller('add-book', ['$scope', function($scope){
 		var bookID = ($scope.data) ? $scope.data.bookID : false;
 		$scope = setScopeInfoForAddEditBook($scope, bookID);
@@ -118,23 +109,19 @@
 		$scope.price = 0;
 		$scope.author = "";
 		$scope.description = "";
-		$scope.typesOption = [];
-		$scope.types = [];
-		$scope.groupsOption = [];
-		$scope.groups = [];
+		$scope.types = [
+				{
+					id: "Disk",
+					name: "Đĩa"
+				},
+				{
+					id: "Book",
+					name: "Sách"
+				}
+			];
 
 		loadInfoBook();
 
-		// Load Type
-		services.getAllTypesBook({
-			quantity: -1,		// Số lượng sách hiển thị (default: 10)
-			offset: 0,			// Số lượng sách bỏ qua (default: 0)
-			selects: [ 'id' ]
-		}, function(data){
-			$scope.typesOption = data;
-			if (!bookID)
-				addMoreType();
-		});
 
 		function loadInfoBook(){
 			if (bookID){
@@ -162,11 +149,6 @@
 			}
 		}
 
-		// Load Type
-		$scope.showAllType = function (){
-			console.log($scope.types);
-		}
-
 		$scope.add_DelMoreType = function(index){
 			if (index >= $scope.types.length-1)
 				addMoreType();
@@ -188,40 +170,12 @@
 			return (index >= $scope.types.length-1) ? "+" : '-';
 		}
 
-		// Load Group
-		services.getAllGroupsBook({
-			quantity: -1,		// Số lượng sách hiển thị (default: 10)
-			offset: 0,			// Số lượng sách bỏ qua (default: 0)
-			selects: [ 'id' ]
-		}, function(data){
-			$scope.groupsOption = data;
-			if (!bookID)
-				addMoreGroup();
-		});
-		$scope.showAllGroup = function (){
-			console.log($scope.groups);
-		}
-
 		$scope.add_DelMoreGroup = function(index){
 			if (index >= $scope.groups.length-1)
 				addMoreGroup();
 			else deleteGroup(index);
 		}
 
-		function deleteGroup(index) {
-			$scope.groups.splice(index, 1);
-		}
-
-		function addMoreGroup() {
-			$scope.groups.push({id: $scope.groupsOption[0]['id']});
-		}
-
-		$scope.groupAddMoreClass = function(index){
-			return (index >= $scope.groups.length-1) ? "add-more" : 'remove-me';
-		}
-		$scope.groupAddMoreIcon = function(index) {
-			return (index >= $scope.groups.length-1) ? "+" : '-';
-		}
 
 		$scope.addBook = function(){
 			var mess = verify();
@@ -229,23 +183,15 @@
 				bootbox.alert(mess);
 				return ;
 			}
-			var types = [];
-			for (var i = $scope.types.length - 1; i >= 0; i--) {
-				types.push($scope.types[i]['id']);
-			}
-			var groups = [];
-			for (var i = $scope.groups.length - 1; i >= 0; i--) {
-				groups.push($scope.groups[i]['id']);
-			}
 			if (!bookID){
 				services.addBook({
-					name: $scope.name,
-					quantity: $scope.quantity,
-					price: $scope.price,
-					author: $scope.author,
-					desciption: $scope.desciption,
-					types: types,
-					groups: groups
+					Name: $scope.name,
+					Quantity: $scope.quantity,
+					Price: $scope.price,
+					Author: $scope.author,
+					Description: $scope.description,
+					Type: $scope.type,
+					Group: $scope.type
 				}, function(success){
 					if (success)
 						bootbox.alert("Thêm sách thành công");

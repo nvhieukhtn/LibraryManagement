@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Api.Models;
 using LibraryManagement.Core.Interface.Service;
 using LibraryManagement.Core.Models;
@@ -13,6 +14,7 @@ using Unity;
 namespace Api.Controllers
 {
     [RoutePrefix("Library")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class LibraryController : ApiController
     {
         private readonly ILibraryService _libraryService;
@@ -64,9 +66,9 @@ namespace Api.Controllers
         }
         [Route("List")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAllDocumentsAsync()
+        public async Task<IHttpActionResult> GetAllDocumentsAsync(string type)
         {
-            var listDocuments = await _libraryService.GetAllDocumentsAsync();
+            var listDocuments = await _libraryService.GetDocumentsAsync(type);
             var listViewDocuments = listDocuments.Select(document => new DocumentViewModel(document));
             return Ok<IEnumerable<DocumentViewModel>>(listViewDocuments);
         }
@@ -98,6 +100,17 @@ namespace Api.Controllers
         {
             await Task.Delay(1000);
             return Ok();
+        }
+
+        [Route("RecentBorrowedDocument")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetListRecentBorrowedDocumentsAsync()
+        {
+            var permission = Permission.GetPermission(Request.Headers);
+            if (string.IsNullOrEmpty(permission.AccountToken))
+                return BadRequest();
+            var listDocuments = await _libraryService.GetListRecentBorrowedDocumentsAsync();
+            return Ok(listDocuments);
         }
     }
 }
