@@ -5,8 +5,9 @@
 	app.controller('body', ['$scope', '$http', function($scope, $http){
 		$scope.role = "admin"; // Admin || user
 		$scope.template_part = "home.html"
-		$scope.changeContent = function(template_part) {
+		$scope.changeContent = function(template_part, data=false) {
 			$scope.template_part = template_part;
+			$scope.data = data;
 		};
 		$scope.activeSidebar = function(template_part) {
 			if (Array.isArray(template_part))
@@ -102,15 +103,27 @@
 	}])
 
 	app.controller('add-book', ['$scope', function($scope){
+		var bookID = ($scope.data) ? $scope.data.bookID : false;
+		$scope = setScopeInfoForAddEditBook($scope, bookID);
+	}]);
+
+	app.controller('edit-book', ['$scope', function($scope){
+		var bookID = ($scope.data) ? $scope.data.bookID : false;
+		$scope = setScopeInfoForAddEditBook($scope, bookID);
+	}]);
+
+	function setScopeInfoForAddEditBook($scope, bookID) {
 		$scope.name = "";
 		$scope.quantity = 0;
 		$scope.price = 0;
 		$scope.author = "";
-		$scope.desciption = "";
+		$scope.description = "";
 		$scope.typesOption = [];
 		$scope.types = [];
 		$scope.groupsOption = [];
 		$scope.groups = [];
+
+		loadInfoBook();
 
 		// Load Type
 		services.getAllTypesBook({
@@ -119,9 +132,37 @@
 			selects: [ 'id' ]
 		}, function(data){
 			$scope.typesOption = data;
-			addMoreType();
+			if (!bookID)
+				addMoreType();
 		});
 
+		function loadInfoBook(){
+			if (bookID){
+				services.getBookInfo({
+					id: bookID
+				},function(bookInfo){
+					if (bookInfo){
+						$scope.name = bookInfo.name;
+						$scope.quantity = bookInfo.quantity;
+						$scope.price = bookInfo.price;
+						$scope.author = bookInfo.author;
+						$scope.description = bookInfo.description;
+						for (var i = bookInfo.types.length - 1; i >= 0; i--) {
+							bookInfo.types[i] = { id: bookInfo.types[i]}
+						}
+						$scope.types = bookInfo.types;
+						for (var i = bookInfo.groups.length - 1; i >= 0; i--) {
+							bookInfo.groups[i] = { id: bookInfo.groups[i]}
+						}
+						$scope.groups = bookInfo.groups;
+					} else {
+						bootbox.alert("Lỗi load dữ liệu...");
+					}
+				});
+			}
+		}
+
+		// Load Type
 		$scope.showAllType = function (){
 			console.log($scope.types);
 		}
@@ -154,9 +195,9 @@
 			selects: [ 'id' ]
 		}, function(data){
 			$scope.groupsOption = data;
-			addMoreGroup();
+			if (!bookID)
+				addMoreGroup();
 		});
-
 		$scope.showAllGroup = function (){
 			console.log($scope.groups);
 		}
@@ -196,19 +237,37 @@
 			for (var i = $scope.groups.length - 1; i >= 0; i--) {
 				groups.push($scope.groups[i]['id']);
 			}
-			services.addBook({
-				name: $scope.name,
-				quantity: $scope.quantity,
-				price: $scope.price,
-				author: $scope.author,
-				desciption: $scope.desciption,
-				types: types,
-				groups: groups
-			}, function(success){
-				if (success)
-					bootbox.alert("Thêm sách thành công");
-				else bootbox.alert("Đã gặp sự cố khi thêm sách");
-			})
+			if (!bookID){
+				services.addBook({
+					name: $scope.name,
+					quantity: $scope.quantity,
+					price: $scope.price,
+					author: $scope.author,
+					desciption: $scope.desciption,
+					types: types,
+					groups: groups
+				}, function(success){
+					if (success)
+						bootbox.alert("Thêm sách thành công");
+					else bootbox.alert("Đã gặp sự cố khi thêm sách");
+				})
+			} else {
+				services.editBook({
+					id: bookID
+				},{
+					name: $scope.name,
+					quantity: $scope.quantity,
+					price: $scope.price,
+					author: $scope.author,
+					desciption: $scope.desciption,
+					types: types,
+					groups: groups
+				}, function(success){
+					if (success)
+						bootbox.alert("Sửa sách thành công");
+					else bootbox.alert("Đã gặp sự cố khi sửa sách");
+				})
+			}
 		}
 		function verify(){
 			var result = "";
@@ -223,6 +282,7 @@
 			return result;
 		}
 
-	}])
+		return $scope;
+	}
 
 })();
