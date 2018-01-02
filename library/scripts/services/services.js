@@ -62,7 +62,28 @@ var services = new function() {
 	*/
 	/******************************************************/
 	this.methodPutBasic = function(url, condition, data, callback=false){
-		this.http.post(url, {data: data, condition: condition}, { params: {data: data, condition: condition} })
+		this.http.put(url, {data: data, condition: condition}, { params: {data: data, condition: condition} })
+		.then(function(response) {
+			var data = JSON.parse(response.data);
+			if (callback) callback(data);
+		}, function(response) {
+			if (callback) callback(false);
+		});
+	}
+
+	/******************************************************/
+	/*************   Phương thức delete cơ bản   *************/
+	/*	Input
+	url	: string		// Đường dẫn của API
+	condition: object	// Điền kiện xóa thông tin
+	/*	Output
+		Thành công
+			callback(data)
+		Thất bại callback(fasle)
+	*/
+	/******************************************************/
+	this.methodPutBasic = function(url, condition, callback=false){
+		this.http.delete(url, { params: condition })
 		.then(function(response) {
 			var data = JSON.parse(response.data);
 			if (callback) callback(data);
@@ -236,8 +257,8 @@ var services = new function() {
 			price: 100000,
 			author: "Nguyễn Văn Hiếu",
 			description: "23 mẫu hướng đối tượng",
-			types: ['TY_001','TY_002'],
-			groups: ['GR_003', 'GR_002']
+			types: [{id: 'TY_001', name: "Báo"},{id: 'TY_002', name: 'sách'}],
+			groups: [{ id: "GR_002", name: "Vui nhôn" }, { id: "GR_003", name: "Hành động" }]
 		});
 	}
 
@@ -267,7 +288,28 @@ var services = new function() {
 	this.editBook = function(condition, data, callback=false){
 		// methodPutBasic("", condition, data, callback);
 		console.log("Sửa sách");
+		console.log(condition);
 		console.log(data);
+		if (callback) callback(true);
+	}
+
+	/******************************************************/
+	/******************   Xóa thông tin sách   ****************/
+	/*	Input
+	condition = [{
+		books_id: [string]			// Danh sách các id
+	}]
+	*/
+	/*	Output
+		Thành công
+			callback(true)
+		Thất bại
+			callback(false)
+	*/
+	this.deleteBook = function(condition, callback=false){
+		// methodPutBasic("", condition, callback)
+		console.log("Xóa sách");
+		console.log(condition);
 		if (callback) callback(true);
 	}
 

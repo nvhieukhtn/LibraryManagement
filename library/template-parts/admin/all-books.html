@@ -26,6 +26,16 @@
 					<input type="text" name="q" class="form-control" placeholder="Tìm kiếm">
 				</div>
 			</div>
+			<div>
+				<div class="action-group">
+					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Hành động <span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="#" ng-click="deleteBooks()">Xóa tất cả</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
 			<div class="table-responsive">          
 				<table class="table cell-middle">
 					<thead>
@@ -51,7 +61,7 @@
 								<button ng-show="book.Quantity > 0" class="btn btn-primary" ng-click="Borrow(book.Id)">Mượn</button>
 								<button class="btn btn-info">Chi tiết</button>
 								<button class="btn btn-success" ng-click="changeContent('edit-book.html', {bookID: book.id})">Sửa</button>
-								<button class="btn btn-danger">Xóa</button>
+								<button class="btn btn-danger" ng-click="deleteBook($index)">Xóa</button>
 							</td>
 						</tr>
 					</tbody>

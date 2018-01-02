@@ -18,6 +18,9 @@
 		services.http = $http;
 	}]);
 
+	/****************************************************************************************************/
+	/****************************************   SIDEBAR  ************************************************/
+	/****************************************************************************************************/
 	app.controller('sidebar', ['$scope', '$http', function($scope, $http){
 		
 	}]);
@@ -135,11 +138,11 @@
 						$scope.author = bookInfo.author;
 						$scope.description = bookInfo.description;
 						for (var i = bookInfo.types.length - 1; i >= 0; i--) {
-							bookInfo.types[i] = { id: bookInfo.types[i]}
+							bookInfo.types[i] = { id: bookInfo.types[i].id}
 						}
 						$scope.types = bookInfo.types;
 						for (var i = bookInfo.groups.length - 1; i >= 0; i--) {
-							bookInfo.groups[i] = { id: bookInfo.groups[i]}
+							bookInfo.groups[i] = { id: bookInfo.groups[i].id}
 						}
 						$scope.groups = bookInfo.groups;
 					} else {
@@ -230,5 +233,45 @@
 
 		return $scope;
 	}
+
+
+	/****************************************************************************************************/
+	/****************************************   VIEW BOOK  **********************************************/
+	/****************************************************************************************************/
+	app.controller('view-book', ['$scope', function($scope){
+		var bookID = ($scope.data) ? $scope.data.bookID : false;
+		$scope.bookID = bookID;
+		if (bookID){
+			services.getBookInfo({
+				id: bookID
+			},function(bookInfo){
+				if (bookInfo){
+					$scope.name = bookInfo.name;
+					$scope.quantity = bookInfo.quantity;
+					$scope.price = bookInfo.price;
+					$scope.author = bookInfo.author;
+					$scope.description = bookInfo.description;
+					$scope.types = "";
+					for (var i = bookInfo.types.length - 1; i >= 1; i--) {
+						$scope.types += bookInfo.types[i].name + ", ";
+					}
+					if ($scope.types != "")
+						$scope.types += bookInfo.types[0].name;
+					$scope.groups = "";
+					for (var i = bookInfo.groups.length - 1; i >= 1; i--) {
+						$scope.groups += bookInfo.groups[i].name + ", ";
+					}
+					if ($scope.groups != "")
+						$scope.groups += bookInfo.groups[0].name;
+				} else {
+					bootbox.alert("Lỗi load dữ liệu...");
+				}
+			});
+		} else {
+			bootbox.alert("Không load được thông tin sách");
+		}
+	}]);
+
+
 
 })();
