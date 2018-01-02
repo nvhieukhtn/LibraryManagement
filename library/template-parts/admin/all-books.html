@@ -26,15 +26,22 @@
 					<input type="text" name="q" class="form-control" placeholder="Tìm kiếm">
 				</div>
 			</div>
+			<div>
+				<div class="action-group">
+					<div class="dropdown">
+						<button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Hành động <span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="#" ng-click="deleteBooks()">Xóa tất cả</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
 			<div class="table-responsive">          
 				<table class="table cell-middle">
 					<thead>
 						<tr>
 							<th class="select-all">
 								<input type="checkbox" name="checkall" ng-model="checkAll" ng-change="checkAllBooks()" >
-								<div class="action">
-									<button class="btn btn-danger">Xóa tất cả</button>
-								</div>
 							</th>
 							<th>Mã</th>
 							<th>Tên sách</th>
@@ -45,7 +52,7 @@
 					</thead>
 					<tbody>
 						<tr ng-repeat="book in allBooks">
-							<td><input type="checkbox" ng-model="book.checked"></td>
+							<td><input type="checkbox" ng-model="allBooks[$index].checked"></td>
 							<td>{{book.id}}</td>
 							<td>{{book.name}}</td>
 							<td>{{book.author}}</td>

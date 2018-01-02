@@ -24,7 +24,6 @@
 		
 	}]);
 
-
 	/****************************************************************************************************/
 	/*****************************************   HOME  **************************************************/
 	/****************************************************************************************************/
@@ -113,29 +112,37 @@
 		}
 
 		$scope.deleteBook = function(index){
-			// bootbox.confirm("Bạn có chắc muốn xóa không?", function(isDelete){
-			// 	if (isDelete) {
-			// 		services.deleteBook({
-			// 			id: $scope.allBooks[index].id
-			// 		},function(success){
-			// 			if (success){
-			// 				$scope.allBooks.splice(index, 1);
-			// 				console.log($scope.allBooks)
-			// 				bootbox.alert("Xóa thành công.");
-			// 			} else {
-			// 				bootbox.alert("Xóa không thành công.");
-			// 			}
-			// 		});
-			// 	}
-			// });
 			var isDelete = confirm("Bạn có chắc muốn xóa không?");
 			if (isDelete) {
 				services.deleteBook({
-					id: $scope.allBooks[index].id
+					books_id: [$scope.allBooks[index].id]
 				},function(success){
 					if (success){
 						$scope.allBooks.splice(index, 1);
-						console.log($scope.allBooks)
+						bootbox.alert("Xóa thành công.");
+					} else {
+						bootbox.alert("Xóa không thành công.");
+					}
+				});
+			}
+		}
+		$scope.deleteBooks = function(){
+			var books_id = [];
+			$scope.allBooks.forEach(function(bookInfo){
+				if (bookInfo.checked)
+					books_id.push(bookInfo.id);
+			});
+			if (books_id.length < 1) return ;
+			var isDelete = confirm("Bạn có chắc muốn xóa "+books_id.length+" sách không?");
+			if (isDelete) {
+				services.deleteBook({
+					books_id: books_id
+				},function(success){
+					if (success){
+						for (var i = $scope.allBooks.length - 1; i >= 0; i--) {
+							if (books_id.indexOf($scope.allBooks[i].id) >= 0)
+								$scope.allBooks.splice(i, 1);
+						}
 						bootbox.alert("Xóa thành công.");
 					} else {
 						bootbox.alert("Xóa không thành công.");
@@ -370,6 +377,6 @@
 		}
 	}]);
 
-	
+
 
 })();

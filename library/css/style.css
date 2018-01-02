@@ -45,7 +45,7 @@ textarea { resize: vertical; }
 #left .user-info .dropinfo:before { position: absolute; bottom: -7px; left: 9px; display: inline-block; border-right: 7px solid transparent; border-top: 7px solid #ccc; border-left: 7px solid transparent; border-bottom-color: rgba(0,0,0,.2); content: ''; }
 
 #content { float: right; width: calc(100% - 240px); overflow: auto; height: 100vh; position: relative; background-color: #f1f1f1; }
-#content .pageheader { position: fixed; left: 240px; right: 0px; height: 55px; padding-left: 15px; padding-right: 15px; display: flex; align-items: center; flex-direction: row; background-color: #fff; box-shadow: 0 1px 0 rgba(0,0,0,.07); }
+#content .pageheader { position: fixed; z-index: 1; left: 240px; right: 0px; height: 55px; padding-left: 15px; padding-right: 15px; display: flex; align-items: center; flex-direction: row; background-color: #fff; box-shadow: 0 1px 0 rgba(0,0,0,.07); }
 #content .pageheader .breadcrumb-new { font-size: 20px; flex: 100%; color: #1a1a1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #content .pageheader .breadcrumb-new .icon { color: #798c9c; margin-right: 10px; }
 #content .pageheader .btn { margin-left: 10px; outline: none; display: inline-block; }

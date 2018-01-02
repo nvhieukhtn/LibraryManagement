@@ -561,9 +561,9 @@ var services = new function() {
 	/******************************************************/
 	/******************   Xóa thông tin sách   ****************/
 	/*	Input
-	condition = {
-		id: string			// Id sách
-	}
+	condition = [{
+		books_id: [string]			// Danh sách các id
+	}]
 	*/
 	/*	Output
 		Thành công
