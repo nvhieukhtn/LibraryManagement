@@ -37,5 +37,18 @@ namespace LibraryManagement.Core.Models
             }
             return false;
         }
+
+        public override BaseModel Clone()
+        {
+            return new Chanels("", "");
+        }
+
+        public override void CopyData(BaseModel model)
+        {
+            var chanel = (Chanels)model;
+            if (chanel == null) return;
+            Name = chanel.Name;
+            Description = chanel.Description;
+        }
     }
 }

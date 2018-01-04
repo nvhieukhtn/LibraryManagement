@@ -18,7 +18,7 @@ namespace LibraryManagement.Core.Models
 
             if (ListDocumentSamples.ContainsKey(type))
             {
-                var document = ListDocumentSamples[type].Clone();
+                var document = (Document)ListDocumentSamples[type].Clone();
                 Enum.TryParse<DocumentGroup>(group, out var groupEnum);
                 document.Group = groupEnum;
                 return document;
@@ -31,7 +31,7 @@ namespace LibraryManagement.Core.Models
 
             if (ListDocumentSamples.ContainsKey(type))
             {
-                var document = ListDocumentSamples[type].Clone();
+                var document = (Document) ListDocumentSamples[type].Clone();
                 document.Description = description;
                 document.Name = name;
                 document.Author = author;

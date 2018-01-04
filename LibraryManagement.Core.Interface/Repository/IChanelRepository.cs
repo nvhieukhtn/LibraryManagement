@@ -10,6 +10,7 @@ namespace LibraryManagement.Core.Interface.Repository
     public interface IChanelRepository
     {
         Task<List<Chanels>> LoadAllChanelsAsync();
+        Task<List<Chanels>> GetAllSubscribeChanelsAsync(Guid userId);
         Task<bool> NotifyAsync(Guid userId, Notification notification);
         Task<List<Notification>> GetAllNotificationsAsync(Guid userId);
         Task<bool> CreateNewChanelAsync(Chanels chanel);

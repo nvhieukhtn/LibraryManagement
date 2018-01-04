@@ -22,9 +22,15 @@ namespace LibraryManagement.Core.Service
             _chanelService = chanelService;
         }
 
-        public async Task<List<Document>> GetDocumentsAsync(string type)
+        public async Task<List<Document>> GetDocumentsAsync(string type, string sortDirection)
         {
+            var sorter = new BaseSorter<Document>();
+            if(sortDirection.Equals("ASC", StringComparison.CurrentCultureIgnoreCase))
+                sorter = new IncreaseDocumentNameSorter();
+            else if (sortDirection.Equals("DESC", StringComparison.CurrentCultureIgnoreCase))
+                sorter = new DecreaseDocumentNameSorter();
             var listDocuments = await _libraryRepository.GetDocumentsAsync(type);
+            listDocuments = sorter.Sort(listDocuments);
             return listDocuments;
         }
 

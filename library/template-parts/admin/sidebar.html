@@ -38,6 +38,19 @@
 				</li>
 			</ul>
 		</li>
+		<li class="next-nav-item" ng-class="activeSidebar(['all-chanels.html'])">
+			<a ng-click="changeContent('all-chanels.html')" class="next-nav-link">
+				<i class="fa fa-users fw icon" aria-hidden="true"></i>
+				<span class="next-nav-text">Quản lý nhóm</span>
+			</a>
+			<ul class="nav-dropdown">
+				<li class="next-nav-item" ng-class="activeSidebar('all-chanels.html')">
+					<a ng-click="changeContent('all-chanels.html')" class="next-nav-link">
+						<span class="next-nav-text">Tất cả nhóm</span>
+					</a>
+				</li>
+			</ul>
+		</li>
 		<li class="next-nav-item" ng-class="activeSidebar(['all-students.html','add-student.html'])">
 			<a ng-click="changeContent('all-students.html')" class="next-nav-link">
 				<i class="fa fa-user fw icon" aria-hidden="true"></i>

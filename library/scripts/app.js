@@ -15,6 +15,7 @@
 			return ($scope.template_part == template_part) ? "active" : "";
 		}
 		sessionStorage.Session = 'e3907d15-0d1e-45e3-906f-0cf0c141abe5';
+		sessionStorage.Role = 'User';
 		services.http = $http;
 	}]);
 
@@ -26,7 +27,8 @@
 	}]);
 	app.controller('home', ['$scope', function($scope){
 		$scope.rentedBooksInfo = [];
-		
+		$scope.listNotifications = [];
+		$scope.role = sessionStorage.Role;
 		services.getBookRented({
 			quantity: 10,		// Số lượng sách hiển thị (default: 10)
 			offset: 0,			// Số lượng sách bỏ qua (default: 0)
@@ -37,9 +39,10 @@
 	}]);
 	
 	app.controller('all-books', ['$scope', function($scope){
+		$scope.role = sessionStorage.Role;
 		$scope.allBooks = [];
-
-
+		$scope.sortDirection = 'ASC';
+		$scope.listNotifications = [];
 		$scope.filterActive = 'All';
 		$scope.activeFilter = function(name){
 			return (name == $scope.filterActive) ? "active" : "";
@@ -61,13 +64,62 @@
 			$scope.allBooks = [];
 			$scope.load();
 		}
-
+		
+		$scope.changeSort = function(){
+			if($scope.sortDirection == 'ASC') $scope.sortDirection = 'DESC';
+			else if ($scope.sortDirection == 'DESC') $scope.sortDirection = 'ASC';
+			$scope.load();
+		}
 		$scope.load = function () {
 			services.getBooks({
-					type: $scope.filterActive
+					type: $scope.filterActive,
+					sortDirection: $scope.sortDirection
 				}, function(data){
 					$scope.allBooks = data;
 				});
+		}
+		$scope.load();
+	}])
+	
+	app.controller('all-chanels', ['$scope', function($scope){
+		$scope.role = sessionStorage.Role;
+		$scope.listChanels = [];
+		$scope.listNotifications = [];
+		$scope.currentTab = 'All';
+		
+		$scope.Subscribe = function(chanelName){
+			services.subscribeChanel({
+				chanelName: chanelName
+			}, function(success){
+				if(success){
+					bootbox.alert("Theo dõi thành công");
+					$scope.load();
+				}
+				else bootbox.alert("Theo dõi thất bại");
+			});
+		}
+
+		$scope.Unsubscribe = function(chanelName){
+			services.unsubscribeChanel({
+				chanelName: chanelName
+			}, function(success){
+				if(success){
+					bootbox.alert("Bỏ theo dõi thành công");
+					$scope.load();
+				}
+				else bootbox.alert("Bỏ theo dõi thất bại");
+			});
+		}
+		$scope.changeTab = function(tabName){
+			$scope.currentTab = tabName;
+			$scope.load();
+		}
+		$scope.load = function () {
+			services.getChanels({
+				subscribe: $scope.currentTab != 'All'
+			}, function(data){
+				$scope.listChanels = data;
+			});
 		}
 		$scope.load();
 	}])
@@ -75,8 +127,8 @@
 	
 	app.controller('borrowed-books', ['$scope', function($scope){
 		$scope.allBooks = [];
-
-		
+		$scope.listNotifications = [];
+		$scope.role = sessionStorage.Role;
 		$scope.Return = function(id){
 			services.returnDocument({
 				id: id

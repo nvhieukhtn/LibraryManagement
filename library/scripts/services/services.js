@@ -1,113 +1,6 @@
 var services = new function() {
 	this.http = null;
 
-	/******************************************************/
-	/*************   Phương thức get cơ bản   *************/
-	/*	Input
-	url	: string		// Đường dẫn của API
-	args : object		// Mảng các tham số
-
-	Tại server $_GET['tham_so_của_args'], ...
-	/*	Output
-		Thành công
-			callback(data)
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
-	this.methodGetBasic = function(url, args, callback=false){
-		this.http.get(url, { 'params': args})
-		.then(function(response) {
-			var data = JSON.parse(response.data);
-			if (callback) callback(data);
-		}, function(response) {
-			if (callback) callback(false);
-		});
-	}
-
-	/******************************************************/
-	/*************   Phương thức post cơ bản   *************/
-	/*	Input
-	url	: string		// Đường dẫn của API
-	args : object		// Mảng các tham số
-
-	Tại server file_get_contents("php://input") để lấy chuỗi json các tham số
-	/*	Output
-		Thành công
-			callback(data)
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
-	this.methodPostBasic = function(url, args, callback=false){
-		this.http.post(url, args, { params: args })
-		.then(function(response) {
-			var data = JSON.parse(response.data);
-			if (callback) callback(data);
-		}, function(response) {
-			if (callback) callback(false);
-		});
-	}
-
-
-	/******************************************************/
-	/*************   Phương thức put cơ bản   *************/
-	/*	Input
-	url	: string		// Đường dẫn của API
-	args : object		// Mảng các tham số
-	condition: object	// Điền kiện sửa thông tin
-	Tại server file_get_contents("php://input") để lấy chuỗi json các tham số
-	/*	Output
-		Thành công
-			callback(data)
-		Thất bại callback(fasle)
-	*/
-	/******************************************************/
-	this.methodPutBasic = function(url, condition, data, callback=false){
-		this.http.put(url, {data: data, condition: condition}, { params: {data: data, condition: condition} })
-		.then(function(response) {
-			var data = JSON.parse(response.data);
-			if (callback) callback(data);
-		}, function(response) {
-			if (callback) callback(false);
-		});
-	}
-
-	/******************************************************/
-	/*************   Phương thức delete cơ bản   *************/
-	/*	Input
-	url	: string		// Đường dẫn của API
-	condition: object	// Điền kiện xóa thông tin
-	/*	Output
-		Thành công
-			callback(data)
-		Thất bại callback(fasle)
-	*/
-	/******************************************************/
-	this.methodPutBasic = function(url, condition, callback=false){
-		this.http.delete(url, { params: condition })
-		.then(function(response) {
-			var data = JSON.parse(response.data);
-			if (callback) callback(data);
-		}, function(response) {
-			if (callback) callback(false);
-		});
-	}
-
-	/******************************************************/
-	/******************   Sách được thuê   ****************/
-	/*	Input
-	args = {
-		quantity: number		// Số lượng sách hiển thị (default: 10) và -1 là tất cả
-		offset: number			// Số lượng sách bỏ qua (default: 0)
-		selects: array			// Các trường cần trả về (default: [])
-	}
-	Tại server $_GET['quantity'], ...
-	*/
-	/*	Output
-		Thành công
-			callback(data)	// data là danh sách các trừng được filter
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
 	this.getBookRented = function(args, callback=false){
 		var config = {
 			headers:{
@@ -122,27 +15,26 @@ var services = new function() {
 			});
 	}
 
-	/******************************************************/
-	/******************   Lấy danh sách sách   ****************/
-	/*	Input
-	args = {
-		type: ['All', 'Available', 'OutOfStock']
-	}
-	Tại server $_GET['quantity'], ...
-	*/
-	/*	Output
-		Thành công
-			callback(data)	// data là danh sách các trừng được filter
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
 	this.getBooks = function(args, callback=false){
 		var config = {
 			headers:{
 				'Session' : sessionStorage.Session
 			}
 		};
-		this.http.get('http://localhost:50371/Library/List?type=' + args.type, config)
+		this.http.get('http://localhost:50371/Library/List?type=' + args.type + '&sortDirection=' + args.sortDirection, config)
+			.then(function(response){
+				if(callback) callback(response.data);
+			}, function(error){
+				if(callback) callback('[]');
+			});
+	}
+	this.getChanels = function(args, callback=false){
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		this.http.get('http://localhost:50371/Notification/AllChanels?subscribe=' + args.subscribe, config)
 			.then(function(response){
 				if(callback) callback(response.data);
 			}, function(error){
@@ -192,26 +84,24 @@ var services = new function() {
 				if(callback) callback(false);
 			});
 	}
-	/******************************************************/
-	/******************   Lấy danh sách nhóm sách   ****************/
-	/*	Input
-	args = {
-		name: string,
-		quantity: int,
-		price: int,
-		author: string,
-		desciption: string,
-		types: array,		// Mảng các id của type
-		groups: array		// Mảng các id groups
+	this.subscribeChanel = function(args, callback=false){
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		var data = {};
+		this.http.post('http://localhost:50371/Notification/SubscribeChanel/' + args.chanelName,data, config)
+		.then(function(response){
+				if(callback) callback(true);
+			}, function(error){
+				if(callback) callback(false);
+			});
 	}
-	Tại server $_GET['quantity'], ...
-	*/
-	/*	Output
-		Thành công
-			callback(data)	// data = true
-		Thất bại callback(data) // data = flase
-	*/
-	/******************************************************/
+	
+	this.unsubscribeChanel = function(args, callback=false){
+		if(callback) callback(false);
+	}
 	this.addBook = function(args, callback=false){
 		var config = {
 			headers:{
@@ -224,7 +114,6 @@ var services = new function() {
 			}, function(error){
 				if (callback) callback(false)
 			});
-		
 	}
 
 	/******************************************************/

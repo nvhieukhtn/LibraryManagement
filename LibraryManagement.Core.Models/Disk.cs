@@ -8,7 +8,7 @@ namespace LibraryManagement.Core.Models
 {
     public class Disk:Document
     {
-        public override Document Clone()
+        public override BaseModel Clone()
         {
             return new Disk
             {

@@ -399,3 +399,23 @@ BEGIN
 		INNER JOIN Document d ON d.ID = bd.DocumentId
 	ORDER BY bd.BorrowedDate DESC
 END
+
+
+GO
+IF OBJECT_ID (N'sp_Chanel_GetSubscribeChanels', N'P') IS NOT NULL
+	DROP PROCEDURE sp_Chanel_GetSubscribeChanels
+GO
+
+CREATE PROCEDURE sp_Chanel_GetSubscribeChanels
+	@UserId UNIQUEIDENTIFIER
+AS 
+BEGIN	
+	SELECT 
+		c.ID, 
+		c.Name, 
+		c.Description, 
+		(SELECT COUNT(1) FROM ChanelSubcribes cs WHERE cs.ChanelId = c.ID ) AS 'NumberOfSubscribes'
+	FROM Chanel c 
+		INNER JOIN ChanelSubcribes cs ON cs.ChanelID = c.ID 
+	WHERE cs.UserId  = @UserId
+END

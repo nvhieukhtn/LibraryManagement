@@ -9,7 +9,7 @@ namespace LibraryManagement.Core.Interface.Service
 {
     public interface ILibraryService
     {
-        Task<List<Document>> GetDocumentsAsync(string type);
+        Task<List<Document>> GetDocumentsAsync(string type, string sortDirection);
         Task<bool> UpdateDocumentInformationAsync(Document document);
         Task<bool> AddDocumentAsync(Document document, string accountToken);
         Task<bool> BorrowDocumentAsync(Guid documentId, string accountToken);

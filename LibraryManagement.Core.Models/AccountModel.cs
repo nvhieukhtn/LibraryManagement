@@ -48,5 +48,15 @@ namespace LibraryManagement.Core.Models
             }
             return account;
         }
+
+        public override BaseModel Clone()
+        {
+            return new AccountModel();
+        }
+
+        public override void CopyData(BaseModel model)
+        {
+            
+        }
     }
 }

@@ -3,12 +3,15 @@
 		<div class="breadcrumb-new"><i class="fa fa-home fw icon" aria-hidden="true"></i> <span class="text">Quản lý chung</span></div>
 		<div class="header-secondary">
 			<div class="group-btn">
-				<button  ng-click="changeContent('add-book.html')" class="btn btn-default">Thêm sách</button>
+				<button ng-if="role == 'Admin'" ng-click="changeContent('add-book.html')" class="btn btn-default">Thêm sách</button>
 			</div>
 		</div>
 		<div class="header-primary">
 			<div class="group-btn">
-				<button class="btn btn-primary">Cho thuê</button>
+				<button type="button" class="btn btn-default">
+					<span class="glyphicon glyphicon-bell"/>
+					Thông báo ({{listNotifications.length}})
+				</button>
 				<button class="btn btn-primary">Trả sách</button>
 			</div>
 		</div>

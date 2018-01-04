@@ -8,14 +8,18 @@ namespace LibraryManagement.Core.Models
 {
     public class Book:Document
     {
-        public override Document Clone()
+        public override BaseModel Clone()
         {
             var book =  new Book
             {
                 Author = Author,
                 Price = Price,
                 Name = Name,
-                Description = Description
+                Description = Description,
+                Quantity = Quantity,
+                Id = Id,
+                AvailableQuantity =  AvailableQuantity,
+                Group =  Group,
             };
             return book;
         }

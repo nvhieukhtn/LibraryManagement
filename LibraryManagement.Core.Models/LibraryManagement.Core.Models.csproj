@@ -45,14 +45,17 @@
     <Compile Include="BaseModel.cs" />
     <Compile Include="Book.cs" />
     <Compile Include="BorrowedDocument.cs" />
+    <Compile Include="DecreaseDocumentNameSorter.cs" />
     <Compile Include="Disk.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="DocumentGroup.cs" />
+    <Compile Include="IncreaseDocumentNameSorter.cs" />
     <Compile Include="LibraryFactory.cs" />
     <Compile Include="Chanels.cs" />
     <Compile Include="NormalAccountState.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BaseSorter.cs" />
     <Compile Include="VipAccountState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

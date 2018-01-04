@@ -89,9 +89,16 @@ namespace LibraryManagement.Core.Service
             });
         }
 
-        public async Task<List<Chanels>> GetAllChanelsAsync()
+        public async Task<List<Chanels>> GetAllChanelsAsync(bool isSubscribe, string accountToken)
         {
-            var listChanels = await _chanelRepository.LoadAllChanelsAsync();
+            List<Chanels> listChanels;
+            if (isSubscribe)
+            {
+                var account = await _authenticationService.GetAccountInformationAsync(accountToken);
+                listChanels = await _chanelRepository.GetAllSubscribeChanelsAsync(account.Id);
+            }
+            else
+                listChanels = await _chanelRepository.LoadAllChanelsAsync();
             return listChanels;
         }
 

@@ -27,9 +27,10 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("AllChanels")]
-        public async Task<IHttpActionResult> GetAllChanelsAsync()
+        public async Task<IHttpActionResult> GetAllChanelsAsync(bool subscribe)
         {
-            var listChanels = await _chanelService.GetAllChanelsAsync();
+            var permision = Permission.GetPermission(Request.Headers);
+            var listChanels = await _chanelService.GetAllChanelsAsync(subscribe, permision.AccountToken);
             var listViewChanels = listChanels.Select(chanel => new ChanelViewModel(chanel)).ToList();
             return Ok(listViewChanels);
         }
@@ -46,7 +47,7 @@ namespace Api.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("SubscribeChanel/{chanelName}")]
         public async Task<IHttpActionResult> SubscribeChanelAsync(string chanelName)
         {

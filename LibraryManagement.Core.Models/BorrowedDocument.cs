@@ -10,7 +10,7 @@ namespace LibraryManagement.Core.Models
     {
         public DateTime BorrowedOn { get; set; }
         public DateTime? ReturnOn { get; set; }
-        public override Document Clone()
+        public override BaseModel Clone()
         {
             return this;
         }

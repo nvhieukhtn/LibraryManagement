@@ -66,9 +66,9 @@ namespace Api.Controllers
         }
         [Route("List")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAllDocumentsAsync(string type)
+        public async Task<IHttpActionResult> GetAllDocumentsAsync(string type, string sortDirection)
         {
-            var listDocuments = await _libraryService.GetDocumentsAsync(type);
+            var listDocuments = await _libraryService.GetDocumentsAsync(type, sortDirection);
             var listViewDocuments = listDocuments.Select(document => new DocumentViewModel(document));
             return Ok<IEnumerable<DocumentViewModel>>(listViewDocuments);
         }

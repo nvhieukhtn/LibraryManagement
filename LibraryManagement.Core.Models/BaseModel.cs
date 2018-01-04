@@ -18,5 +18,8 @@ namespace LibraryManagement.Core.Models
             CreatedOn = DateTime.UtcNow;
             UpdatedOn = DateTime.UtcNow;
         }
+
+        public abstract BaseModel Clone();
+        public abstract void CopyData(BaseModel model);
     }
 }

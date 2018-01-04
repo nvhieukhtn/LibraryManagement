@@ -1,0 +1,60 @@
+<div id="content" ng-controller="all-chanels">
+	<div class="pageheader">
+		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý sách</span></div>
+		<div class="header-secondary">
+			<div class="group-btn">
+				<button type="button" class="btn btn-default">
+					<span class="glyphicon glyphicon-bell"/>
+					Thông báo ({{listNotifications.length}})
+				</button>
+				<button class="btn btn-default">Trả sách</button>
+			</div>
+		</div>
+		<div class="header-primary">
+			<div class="group-btn">
+				<button ng-if="role == 'Admin'"  ng-click="changeContent('add-book.html')" class="btn btn-primary">Thêm sách</button>
+			</div>
+		</div>
+	</div>
+	<div class="one-row-actions">
+		<div class="box-content">
+			<h1 class="main-title">Tất cả nhóm</h1>
+			<div class="filter">
+				<div class="pull-left">
+					<button ng-click="changeTab('All')" class="btn btn-default">Tất cả <span ng-show="currentTab == 'All'">({{listChanels.length}})</span></button>
+					<button ng-click="changeTab('Subscribe')" class="btn btn-default">Theo dõi <span ng-show="currentTab == 'Subscribe'">({{listChanels.length}})</span></button>
+				</div>
+				<div class="pull-right">
+					<input type="text" name="q" class="form-control" placeholder="Tìm kiếm">
+				</div>
+			</div>
+			<div class="table-responsive">          
+				<table class="table cell-middle">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th class="text-left">Tên nhóm</th>
+							<th class="text-center">Số lượng memebers</th>
+							<th class="text-left">Mô tả</th>
+							<th class="text-right">Hành động</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="chanel in listChanels">
+							<td>{{$index + 1}}</td>
+							<td class="text-left">{{chanel.Name}}</td>
+							<td class="text-center">{{chanel.NumberOfSubscribers}}</td>
+							<td class="text-left">{{chanel.Description}}</td>
+							<td class="text-right">
+								<button ng-if="role == 'User'" ng-show="currentTab == 'All'" class="btn btn-success" ng-click="Subscribe(chanel.Name)">Theo dõi</button>
+								<button ng-if="role == 'User'" class="btn btn-danger" ng-click="Unsubscribe(chanel.Name)">Bỏ theo dõi</button>
+								<button ng-if="role == 'Admin'" class="btn btn-primary" ng-click="PushNotification(chanel.Name)">Thông báo</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</div>

@@ -35,6 +35,32 @@ namespace LibraryManagement.Infrastructure.Repository
             }
         }
 
+        public async Task<List<Chanels>> GetAllSubscribeChanelsAsync(Guid userId)
+        {
+            var listChanels = new List<Chanels>();
+            using (var db = DataAccessFactory.CreateDataAccess("sp_Chanel_GetSubscribeChanels", DatabaseType.Read))
+            {
+                var listParams = new Dictionary<string, object>()
+                {
+                    {"UserId", userId}
+                };
+
+                var dataReader = await db.ExecuteReaderAsync(listParams);
+                while (dataReader.Read())
+                {
+                    var chanel = new Chanels
+                    {
+                        Id = (Guid)dataReader["Id"],
+                        Name = (string)dataReader["Name"],
+                        Description = (string)dataReader["Description"],
+                        NumberOfSubscribes = (int)dataReader["NumberOfSubscribes"]
+                    };
+                    listChanels.Add(chanel);
+                }
+                return listChanels;
+            }
+        }
+
         public async Task<bool> NotifyAsync(Guid userId, Notification notification)
         {
             using (var db = DataAccessFactory.CreateDataAccess("sp_Notification_Notify", DatabaseType.Write))
