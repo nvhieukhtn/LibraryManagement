@@ -3,13 +3,10 @@
 		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý tài liệu / Thêm tài liệu</span></div>
 		<div class="header-secondary">
 			<div class="group-btn">
-				<button class="btn btn-default">Cho thuê</button>
-				<button class="btn btn-default">Trả tài liệu</button>
-			</div>
-		</div>
-		<div class="header-primary">
-			<div class="group-btn">
-				<button ng-click="changeContent('add-book.html')" class="btn btn-primary">Thêm tài liệu</button>
+				<button type="button" class="btn btn-default" ng-click="changeContent('notifications.html')">
+					<span class="glyphicon glyphicon-bell"/>
+					Thông báo ({{listNotifications.length}})
+				</button>
 			</div>
 		</div>
 	</div>

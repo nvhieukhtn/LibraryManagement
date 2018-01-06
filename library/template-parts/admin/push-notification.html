@@ -1,0 +1,52 @@
+<div id="content" ng-controller="push-notification">
+	<div class="pageheader">
+		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Thông báo / Thêm thông báo</span></div>
+		<div class="header-secondary">
+			<div class="group-btn">
+				<button type="button" class="btn btn-default" ng-click="changeContent('notifications.html')">
+					<span class="glyphicon glyphicon-bell"/>
+					Thông báo ({{listNotifications.length}})
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="one-row-actions">
+		<div class="box-content">
+			<h1 class="main-title">Thêm thông báo</h1>
+			<div class="input-content add-new">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Tên thông báo:</label>
+						</div>
+						<div class="col-sm-9">
+							<input type="text" name="name" class="form-control" ng-model="Name">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Chanel nhận thông báo:</label>
+						</div>
+						<div class="col-sm-9">
+							<select type="number" name="name" class="form-control" ng-model="Chanel"
+							ng-options="ListChanel for ListChanel in ListChanels">
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Mô tả:</label>
+						</div>
+						<div class="col-sm-9">
+							<textarea type="number" name="name" class="form-control" ng-model="Description"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="text-right">
+					<button class="btn btn-primary" ng-click="pushNotification()">Push</button>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>

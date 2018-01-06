@@ -4,7 +4,8 @@
 
 	app.controller('body', ['$scope', '$http', function($scope, $http){
 		$scope.role = "admin"; // Admin || user
-		$scope.template_part = "home.html"
+		$scope.template_part = "home.html";
+		$scope.listNotifications = [];
 		$scope.changeContent = function(template_part, data=false) {
 			$scope.template_part = template_part;
 			$scope.data = data;
@@ -17,6 +18,10 @@
 		sessionStorage.Session = 'e3907d15-0d1e-45e3-906f-0cf0c141abe5';
 		sessionStorage.Role = 'User';
 		services.http = $http;
+
+		services.getAllNotitications(function(AllNotitications){
+			$scope.listNotifications = AllNotitications;
+		})
 	}]);
 
 	/****************************************************************************************************/
@@ -27,7 +32,6 @@
 	}]);
 	app.controller('home', ['$scope', function($scope){
 		$scope.rentedBooksInfo = [];
-		$scope.listNotifications = [];
 		$scope.role = sessionStorage.Role;
 		services.getBookRented({
 			quantity: 10,		// Số lượng sách hiển thị (default: 10)
@@ -42,7 +46,6 @@
 		$scope.role = sessionStorage.Role;
 		$scope.allBooks = [];
 		$scope.sortDirection = 'ASC';
-		$scope.listNotifications = [];
 		$scope.filterActive = 'All';
 		$scope.activeFilter = function(name){
 			return (name == $scope.filterActive) ? "active" : "";
@@ -84,7 +87,6 @@
 	app.controller('all-chanels', ['$scope', function($scope){
 		$scope.role = sessionStorage.Role;
 		$scope.listChanels = [];
-		$scope.listNotifications = [];
 		$scope.currentTab = 'All';
 		
 		$scope.Subscribe = function(chanelName){
@@ -127,7 +129,6 @@
 	
 	app.controller('borrowed-books', ['$scope', function($scope){
 		$scope.allBooks = [];
-		$scope.listNotifications = [];
 		$scope.role = sessionStorage.Role;
 		$scope.Return = function(id){
 			services.returnDocument({
@@ -406,7 +407,7 @@
 						mssv: $scope.mssv,
 						username: $scope.username,
 						password: $scope.password,
-						birthDay: $scope.birthDay,
+						birthDay: $scope.birthDay.getDate() +"-"+ ($scope.birthDay.getMonth()+1) +"-"+ ($scope.birthDay.getYear() + 1900),
 						school: $scope.school,
 						address: $scope.address,
 						email: $scope.email,
@@ -423,9 +424,11 @@
 	}]);
 
 	app.controller('edit-student', ['$scope', function($scope){
+		var id = $scope.data.id;
 		$scope.fullname = "";
 		$scope.mssv = "";
 		$scope.username = "";
+		$scope.hasUpdatePass = false;
 		$scope.password = "";
 		$scope.password_confirm = "";
 		$scope.birthDay = "";
@@ -434,8 +437,21 @@
 		$scope.email = "";
 		$scope.description = "";
 
+		services.getStudentInfo({id:id}, function(studentInfo){
+			if (studentInfo == null)
+				return bootbox.alert("Không tìm thấy id sinh viên");
+			$scope.fullname = studentInfo.fullname;
+			$scope.mssv = studentInfo.mssv;
+			$scope.username = studentInfo.username;
+			$scope.birthDay = new Date(studentInfo.birthDay);
+			$scope.school = studentInfo.school;
+			$scope.address = studentInfo.address;
+			$scope.email = studentInfo.email;
+			$scope.description = studentInfo.description;
+		});
+
 		function verifyStudentInfo(callback){
-			var mes = "";
+
 			if ($scope.fullname == ""){
 				bootbox.alert("Vui lòng nhập họ và tên");
 				return callback(false);
@@ -452,49 +468,96 @@
 				bootbox.alert("Vui lòng nhập tên đăng nhập <br>");
 				return callback(false);
 			}
-			if ($scope.password == ""){
-				bootbox.alert("Vui lòng nhập mật khẩu <br>");
-				return callback(false);
-			}
-			if ($scope.password_confirm == ""){
-				bootbox.alert("Vui lòng nhập xác nhận mật khẩu <br>");
-				return callback(false);
-			}
-			if ($scope.password != $scope.password_confirm || $scope.password.length < 8){
-				bootbox.alert("Xác nhận mật khẩu không khớp hoặc quá ngắn");
-				return callback(false);
-			}
-
-			services.verifyUserName({username: $scope.username}, function(success){
-				if (!success) {
-					bootbox.alert("Tên đăng nhập đã tồn tại");
+			if ($scope.hasUpdatePass){
+				if ($scope.password == ""){
+					bootbox.alert("Vui lòng nhập mật khẩu <br>");
 					return callback(false);
 				}
-				return callback(true);
-			});
+				if ($scope.password_confirm == ""){
+					bootbox.alert("Vui lòng nhập xác nhận mật khẩu <br>");
+					return callback(false);
+				}
+				if ($scope.password != $scope.password_confirm || $scope.password.length < 8){
+					bootbox.alert("Xác nhận mật khẩu không khớp hoặc quá ngắn");
+					return callback(false);
+				}
+			}
+			return callback(true);
+
 		}
-		$scope.addStudent = function (){
+		$scope.updateStudent = function (){
 			verifyStudentInfo(function(success){
 				if (success){
-					services.registerStudent({
+					services.updateStudent({
+						id: id,
 						fullname: $scope.fullname,
 						mssv: $scope.mssv,
-						username: $scope.username,
+						hasUpdatePass: $scope.hasUpdatePass,
 						password: $scope.password,
-						birthDay: $scope.birthDay,
+						birthDay: $scope.birthDay.getDate() +"-"+ ($scope.birthDay.getMonth()+1) +"-"+ ($scope.birthDay.getYear() + 1900),
 						school: $scope.school,
 						address: $scope.address,
 						email: $scope.email,
 						description: $scope.description
 					}, function(success){
 						if (success)
-							bootbox.alert("Đã thêm thành công");
+							bootbox.alert("Cập nhật thành công");
 						else
-							bootbox.alert("Thêm không thành công");
+							bootbox.alert("Cập nhật không thành công");
 					});
 				}
 			})
 		}
 	}]);
+
+	app.controller('all-notifications', ['$scope', function($scope){
+		$scope.Detail = function(index){
+			var detail = "";
+			detail += "<b>Tên thông báo: </b>" + $scope.listNotifications[index].Name + "<br>";
+			detail += "<b>Chanel: </b>" + $scope.listNotifications[index].ChanelName + "<br>";
+			detail += "<b>Mô tả: </b>" + $scope.listNotifications[index].Description + "<br>";
+			bootbox.alert(detail);
+		}
+	}]);
+
+	app.controller('push-notification', ['$scope', function($scope){
+		$scope.Name = "";
+		$scope.ListChanels = [];
+		$scope.Description = "";
+		services.getAllChanels(function(allChanels){
+			$scope.ListChanels = allChanels;
+			$scope.Chanel = (allChanels.length > 0) ? allChanels[0] : "";
+		})
+		function verifyNotificationInfo(callback){
+			if ($scope.Name == ""){
+				bootbox.alert("Vui lòng nhập tên thông báo");
+				return callback(false);
+			}
+			if ($scope.Chanel == ""){
+				bootbox.alert("Vui lòng chọn Chanel");
+				return callback(false);
+			}
+			if ($scope.Description == ""){
+				bootbox.alert("Vui lòng nhập mô tả");
+				return callback(false);
+			}
+			return callback(true);
+		}
+		$scope.pushNotification = function(){
+			verifyNotificationInfo(function(success){
+				if (success)
+					services.pushNotification({
+						Name: $scope.Name,
+						Chanel: $scope.Chanel,
+						Description: $scope.Description
+					}, function(success){
+						if (success)
+							bootbox.alert("Thêm thông báo thành công");
+						else
+							bootbox.alert("Thêm thông báo thất bại");
+					})
+			})
+		}
+	}])
 
 })();

@@ -247,17 +247,91 @@ var services = new function() {
 		callback(true);
 	}
 
-	// $args = { fullname, mssv, username, password, birthDay, school, address, email, description }
+	// $args = { fullname, mssv, username, password, birthDay(yyyy mm dd), school, address, email, description }
 	// Thêm thành công callback(false);
 	// Thêm thất bại callback(true);
 	this.registerStudent = function ($args, callback){
 		callback(true);
+		console.log($args)
 	}
 
 	// $args = { id }
 	// Xóa thành công callback(false);
 	// Xóa thất bại callback(true);
 	this.deleteStudent = function ($args, callback){
+		callback(true);
+	}
+
+	// $args { id }
+	// Thành công callback({fullname, mssv, username, birthDay(yyyy-mm-dd), school, address, email, description});
+	// Thất bại callback(null);
+	this.getStudentInfo = function($args, callback){
+		callback({
+			fullname: "Nguyễn Văn Huy",
+			mssv: "1412209",
+			username: "vanhuy",
+			birthDay: '1996-04-17',
+			school: "KHTN",
+			address: "Q8",
+			email: "a@gmail.com",
+			description: "123"
+		})
+	}
+
+	// Cập nhật tài khoản có id là $args.id
+	// $args.hasUpdatePass: Có thay đổi pass không. Nếu có thì pass mới là $args.password
+	// $args { id, fullname, mssv, birthDay(yyyy-mm-dd), hasUpdatePass, password, school, address, email, description }
+	// Thành công callback(true)
+	// Thất bại callback(false)
+	this.updateStudent = function($args, callback){
+		console.log($args);
+		callback(true);
+	}
+
+	// Tất cả thông báo
+	// Callback([ {id, Name, ChanelName, Description} ])
+	this.getAllNotitications = function(callback){
+		callback([
+			{
+				id: "NO_01",
+				Name: "Thông báo 1",
+				ChanelName: "Sách abc",
+				Description: "Vừa nhập 100 sách abc"
+			},
+			{
+				id: "NO_02",
+				Name: "Thông báo 2",
+				ChanelName: "Sách abc",
+				Description: "Vừa nhập 100 sách abc"
+			},
+			{
+				id: "NO_03",
+				Name: "Thông báo 3",
+				ChanelName: "Sách abc",
+				Description: "Vừa nhập 100 sách abc"
+			},
+			{
+				id: "NO_04",
+				Name: "Thông báo 4",
+				ChanelName: "Sách abc",
+				Description: "Vừa nhập 100 sách abc"
+			}
+		])
+	}
+
+	// callback([string]) // list chanel name
+	this.getAllChanels = function(callback){
+		callback([
+				"Abc",
+				"Xyz"
+			]);
+	}
+
+	// $args = { Name, Chanel, Description }
+	// Thành công callback(true)
+	// Thất bại callback(false)
+	this.pushNotification = function($args, callback) {
+		console.log($args);
 		callback(true);
 	}
 

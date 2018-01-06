@@ -1,4 +1,4 @@
-<div id="content" ng-controller="add-student">
+<div id="content" ng-controller="edit-student">
 	<div class="pageheader">
 		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý sinh viên / Thêm sinh viên</span></div>
 		<div class="header-secondary">
@@ -44,10 +44,17 @@
 							<label>Tên đăng nhập (*):</label>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" name="name" class="form-control" ng-model="username">
+							<input type="text" name="name" class="form-control" disabled ng-model="username">
 						</div>
 					</div>
 					<div class="form-group">
+						<div class="col-sm-9 col-xs-offset-3">
+							<div class="checkbox">
+								<label><input type="checkbox" value="" ng-model="hasUpdatePass">Cập nhật Mật khẩu</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" ng-show="hasUpdatePass">
 						<div class="col-sm-3 text-right">
 							<label>Mật khẩu (*):</label>
 						</div>
@@ -55,7 +62,7 @@
 							<input type="password" name="name" class="form-control" ng-model="password">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" ng-show="hasUpdatePass">
 						<div class="col-sm-3 text-right">
 							<label>Xác nhận mật khẩu (*):</label>
 						</div>
@@ -97,7 +104,7 @@
 					</div>
 				</div>
 				<div class="text-right">
-					<button class="btn btn-primary" ng-click="addStudent()">Thêm</button>
+					<button class="btn btn-primary" ng-click="updateStudent()">Cập nhật</button>
 				</div>
 			</div>
 		</div>

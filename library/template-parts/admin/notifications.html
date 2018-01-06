@@ -1,0 +1,53 @@
+<div id="content" ng-controller="all-notifications">
+	<div class="pageheader">
+		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Thông báo</span></div>
+		<div class="header-secondary">
+			<div class="group-btn">
+				<button type="button" class="btn btn-default" ng-click="changeContent('notifications.html')">
+					<span class="glyphicon glyphicon-bell"/>
+					Thông báo ({{listNotifications.length}})
+				</button>
+			</div>
+		</div>
+		<div class="header-primary">
+			<div class="group-btn">
+				<button type="button" class="btn btn-primary" ng-click="changeContent('push-notification.html')">Thêm thông báo</button>
+			</div>
+		</div>
+		<div class="header-primary">
+			<div class="group-btn">
+				<button ng-if="role == 'Admin'"  ng-click="changeContent('add-book.html')" class="btn btn-primary">Thêm sách</button>
+			</div>
+		</div>
+	</div>
+	<div class="one-row-actions">
+		<div class="box-content">
+			<h1 class="main-title">Tất cả thông báo</h1>
+			<div class="table-responsive">          
+				<table class="table cell-middle">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Tên thông báo</th>
+							<th>Chanel</th>
+							<th>Mô tả</th>
+							<th class="text-right">Hành động</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="notification in listNotifications">
+							<td>{{$index + 1}}</td>
+							<td>{{notification.Name}}</td>
+							<td>{{notification.ChanelName}}</td>
+							<td>{{notification.Description}}</td>
+							<td class="text-right">
+								<button class="btn btn-primary" ng-click="Detail($index)">Chi tiết</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+</div>
