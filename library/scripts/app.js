@@ -558,6 +558,40 @@
 					})
 			})
 		}
+	}]);
+
+	app.controller('sign-in', ['$scope', function($scope){
+		$scope.username = "";
+		$scope.password = "";
+		$scope.message = "";
+		function verifySignIn(callback){
+			if($scope.username == ""){
+				$scope.message = "Vui lòng nhập tên đăng nhập";
+				return callback(false);
+			}
+			if($scope.password == ""){
+				$scope.message = "Vui lòng nhập mật khẩu";
+				return callback(false);
+			}
+			$scope.message = "";
+			return callback(true);
+		}
+		$scope.signIn = function(){
+			verifySignIn (function(success){
+				if (!success) return ;
+				services.signIn({
+					username: $scope.username,
+					password: $scope.password
+				}, function(data){
+					if (! data.success)
+						$scope.message = "Tên đăng nhập hoặc mật khẩu không đúng"
+					else redirect("index.html");
+				});
+			})
+		}
+		function redirect(path){
+			window.location.href = path;
+		}
 	}])
 
 })();

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="utf-8">
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<title>Library Books</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<script type="text/javascript" src="scripts/vendor/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="scripts/vendor/bootstrap.min.js"></script>
+	<script type="text/javascript" src="scripts/vendor/bootbox.min.js"></script>
+	<script type="text/javascript" src="scripts/vendor/angular.js"></script>
+	<script type="text/javascript" src="scripts/services/services.js"></script>
+	<script type="text/javascript" src="scripts/app.js"></script>
+</head>
+<body ng-controller="body">
+	<div class="sign-in" ng-controller="sign-in">
+		<div style="background-image: url(images/bg-sign-in.jpg);" class="bg"></div>
+		<div class="container-sign-in">
+			<h1 class="title-site">LIBRARY</h1>
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+				<input id="username" type="text" class="form-control" name="email" placeholder="Username" ng-model="username">
+			</div>
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+				<input id="password" type="password" class="form-control" name="password" placeholder="Password" ng-model="password">
+			</div>
+			<div class="mes">
+				{{message}}
+			</div>
+			<div class="text-right">
+				<button class="btn btn-warning" ng-click="signIn()">Đăng nhập</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

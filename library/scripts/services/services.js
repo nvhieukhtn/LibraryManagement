@@ -335,5 +335,11 @@ var services = new function() {
 		callback(true);
 	}
 
+	// $args = { username, password }
+	// callback({success: true, ...})
+	this.signIn = function ($args, callback){
+		callback({success: true});
+	}
+
 	return this;
 }
