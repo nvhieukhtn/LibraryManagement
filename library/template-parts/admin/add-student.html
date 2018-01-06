@@ -1,4 +1,4 @@
-<div id="content">
+<div id="content" ng-controller="add-student">
 	<div class="pageheader">
 		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý sinh viên / Thêm sinh viên</span></div>
 		<div class="header-secondary">
@@ -20,18 +20,50 @@
 				<div class="row">
 					<div class="form-group">
 						<div class="col-sm-3 text-right">
-							<label>Tên sinh viên:</label>
+							<label>Họ và tên (*):</label>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" name="name" class="form-control">
+							<input type="text" name="name" ng-model="fullname" class="form-control">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3 text-right">
-							<label>Mã số sinh viên:</label>
+							<label>Mã số sinh viên (*):</label>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" name="name" class="form-control">
+							<input type="text" name="name" class="form-control" ng-model="mssv">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Trường (*):</label>
+						</div>
+						<div class="col-sm-9">
+							<input type="text" name="name" class="form-control" ng-model="school">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Tên đăng nhập (*):</label>
+						</div>
+						<div class="col-sm-9">
+							<input type="text" name="name" class="form-control" ng-model="username">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Mật khẩu (*):</label>
+						</div>
+						<div class="col-sm-9">
+							<input type="password" name="name" class="form-control" ng-model="password">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Xác nhận mật khẩu (*):</label>
+						</div>
+						<div class="col-sm-9">
+							<input type="password" name="name" class="form-control" ng-model="password_confirm">
 						</div>
 					</div>
 					<div class="form-group">
@@ -39,15 +71,15 @@
 							<label>Ngày sinh:</label>
 						</div>
 						<div class="col-sm-9">
-							<input type="date" name="name" class="form-control">
+							<input type="date" name="name" class="form-control" ng-model="birthDay">
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-3 text-right">
-							<label>Trường:</label>
+							<label>Email:</label>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" name="name" class="form-control">
+							<input type="text" name="name" class="form-control" ng-model="email">
 						</div>
 					</div>
 					<div class="form-group">
@@ -55,7 +87,7 @@
 							<label>Địa chỉ:</label>
 						</div>
 						<div class="col-sm-9">
-							<input type="text" name="name" class="form-control">
+							<input type="text" name="name" class="form-control" ng-model="address">
 						</div>
 					</div>
 					<div class="form-group">
@@ -63,12 +95,12 @@
 							<label>Mô tả:</label>
 						</div>
 						<div class="col-sm-9">
-							<textarea name="name" class="form-control" rows="4"></textarea>
+							<textarea name="name" class="form-control" rows="4" ng-model="description"></textarea>
 						</div>
 					</div>
 				</div>
 				<div class="text-right">
-					<button class="btn btn-primary">Thêm</button>
+					<button class="btn btn-primary" ng-click="addStudent()">Thêm</button>
 				</div>
 			</div>
 		</div>

@@ -1,0 +1,77 @@
+<div id="content" ng-controller="view-book">
+	<div class="pageheader">
+		<div class="breadcrumb-new"><i class="fa fa-book fw icon" aria-hidden="true"></i> <span class="text">Quản lý sách / Chi tiết sách</span></div>
+		<div class="header-secondary">
+			<div class="group-btn">
+				<button class="btn btn-default">Cho thuê</button>
+				<button class="btn btn-default">Trả sách</button>
+			</div>
+		</div>
+		<div class="header-primary">
+			<div class="group-btn">
+				<button class="btn btn-primary">Thêm sách</button>
+			</div>
+		</div>
+	</div>
+	<div class="one-row-actions">
+		<div class="box-content">
+			<h1 class="main-title">{{name}}</h1>
+			<div class="input-content add-new">
+				<div class="row">
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Số lượng:</label>
+						</div>
+						<div class="col-sm-9">
+							<div>{{quantity}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Giá (VNĐ):</label>
+						</div>
+						<div class="col-sm-9">
+							<div>{{price}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Tác giả:</label>
+						</div>
+						<div class="col-sm-9">
+							<div>{{author}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Mô tả:</label>
+						</div>
+						<div class="col-sm-9">
+							<div>{{description}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Loại sách:</label>
+						</div>
+						<div class="col-sm-9">
+							<div>{{types}}</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-3 text-right">
+							<label>Nhóm sách:</label>
+						</div>
+						<div class="col-sm-9">
+							<div>{{groups}}</div>
+						</div>
+					</div>
+				</div>
+				<div class="text-right">
+					<button class="btn btn-primary" ng-click="changeContent('edit-book.html', {bookID: bookID})">Sửa</button>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>

@@ -324,6 +324,177 @@
 		}
 	}]);
 
+	app.controller('all-students', ['$scope', function($scope){
+		$scope.studentInfos = [];
+		$scope.q = "";
+		services.getAllStudentInfos({
+			q: $scope.q
+		}, function($result){
+			$scope.studentInfos = $result;
+		});
 
+		$scope.deleteStudent = function (index){
+			if(confirm("Bạn có chắc muốn xóa 1 sinh viên?"))
+				services.deleteStudent({id:$scope.studentInfos[index].id}, function(success){
+					if (success){
+						bootbox.alert("Xóa thành công");
+						$scope.studentInfos.splice(index, 1);
+					} else {
+						bootbox.alert("Xóa không thành công");
+					}
+				})
+		}
+
+	}]);
+
+	app.controller('add-student', ['$scope', function($scope){
+		$scope.fullname = "";
+		$scope.mssv = "";
+		$scope.username = "";
+		$scope.password = "";
+		$scope.password_confirm = "";
+		$scope.birthDay = "";
+		$scope.school = "";
+		$scope.address = "";
+		$scope.email = "";
+		$scope.description = "";
+
+		function verifyStudentInfo(callback){
+			var mes = "";
+			if ($scope.fullname == ""){
+				bootbox.alert("Vui lòng nhập họ và tên");
+				return callback(false);
+			}
+			if ($scope.mssv == ""){
+				bootbox.alert("Vui lòng nhập MSSV <br>");
+				return callback(false);
+			}
+			if ($scope.school == ""){
+				bootbox.alert("Vui lòng nhập trường học <br>");
+				return callback(false);
+			}
+			if ($scope.username == ""){
+				bootbox.alert("Vui lòng nhập tên đăng nhập <br>");
+				return callback(false);
+			}
+			if ($scope.password == ""){
+				bootbox.alert("Vui lòng nhập mật khẩu <br>");
+				return callback(false);
+			}
+			if ($scope.password_confirm == ""){
+				bootbox.alert("Vui lòng nhập xác nhận mật khẩu <br>");
+				return callback(false);
+			}
+			if ($scope.password != $scope.password_confirm || $scope.password.length < 8){
+				bootbox.alert("Xác nhận mật khẩu không khớp hoặc quá ngắn");
+				return callback(false);
+			}
+
+			services.verifyUserName({username: $scope.username}, function(success){
+				if (!success) {
+					bootbox.alert("Tên đăng nhập đã tồn tại");
+					return callback(false);
+				}
+				return callback(true);
+			});
+		}
+		$scope.addStudent = function (){
+			verifyStudentInfo(function(success){
+				if (success){
+					services.registerStudent({
+						fullname: $scope.fullname,
+						mssv: $scope.mssv,
+						username: $scope.username,
+						password: $scope.password,
+						birthDay: $scope.birthDay,
+						school: $scope.school,
+						address: $scope.address,
+						email: $scope.email,
+						description: $scope.description
+					}, function(success){
+						if (success)
+							bootbox.alert("Đã thêm thành công");
+						else
+							bootbox.alert("Thêm không thành công");
+					});
+				}
+			})
+		}
+	}]);
+
+	app.controller('edit-student', ['$scope', function($scope){
+		$scope.fullname = "";
+		$scope.mssv = "";
+		$scope.username = "";
+		$scope.password = "";
+		$scope.password_confirm = "";
+		$scope.birthDay = "";
+		$scope.school = "";
+		$scope.address = "";
+		$scope.email = "";
+		$scope.description = "";
+
+		function verifyStudentInfo(callback){
+			var mes = "";
+			if ($scope.fullname == ""){
+				bootbox.alert("Vui lòng nhập họ và tên");
+				return callback(false);
+			}
+			if ($scope.mssv == ""){
+				bootbox.alert("Vui lòng nhập MSSV <br>");
+				return callback(false);
+			}
+			if ($scope.school == ""){
+				bootbox.alert("Vui lòng nhập trường học <br>");
+				return callback(false);
+			}
+			if ($scope.username == ""){
+				bootbox.alert("Vui lòng nhập tên đăng nhập <br>");
+				return callback(false);
+			}
+			if ($scope.password == ""){
+				bootbox.alert("Vui lòng nhập mật khẩu <br>");
+				return callback(false);
+			}
+			if ($scope.password_confirm == ""){
+				bootbox.alert("Vui lòng nhập xác nhận mật khẩu <br>");
+				return callback(false);
+			}
+			if ($scope.password != $scope.password_confirm || $scope.password.length < 8){
+				bootbox.alert("Xác nhận mật khẩu không khớp hoặc quá ngắn");
+				return callback(false);
+			}
+
+			services.verifyUserName({username: $scope.username}, function(success){
+				if (!success) {
+					bootbox.alert("Tên đăng nhập đã tồn tại");
+					return callback(false);
+				}
+				return callback(true);
+			});
+		}
+		$scope.addStudent = function (){
+			verifyStudentInfo(function(success){
+				if (success){
+					services.registerStudent({
+						fullname: $scope.fullname,
+						mssv: $scope.mssv,
+						username: $scope.username,
+						password: $scope.password,
+						birthDay: $scope.birthDay,
+						school: $scope.school,
+						address: $scope.address,
+						email: $scope.email,
+						description: $scope.description
+					}, function(success){
+						if (success)
+							bootbox.alert("Đã thêm thành công");
+						else
+							bootbox.alert("Thêm không thành công");
+					});
+				}
+			})
+		}
+	}]);
 
 })();

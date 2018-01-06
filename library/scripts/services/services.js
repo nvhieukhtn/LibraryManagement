@@ -202,5 +202,64 @@ var services = new function() {
 		if (callback) callback(true);
 	}
 
+	// args = {q}	- q: chuỗi tìm kiếm theo tên đăng nhập
+	// Trả về callback: [{ id, username, fullname, email }]
+	this.getAllStudentInfos = function(args, callback=false){
+		if (callback)
+			callback([
+				{
+					id: "SV_01",
+					username: "username_1",
+					fullname: "Nguyễn Văn A",
+					email: "a@gmail.com",
+				},
+				{
+					id: "SV_02",
+					username: "username_1",
+					fullname: "Nguyễn Văn A",
+					email: "a@gmail.com",
+				},
+				{
+					id: "SV_03",
+					username: "username_1",
+					fullname: "Nguyễn Văn A",
+					email: "a@gmail.com",
+				},
+				{
+					id: "SV_04",
+					username: "username_1",
+					fullname: "Nguyễn Văn A",
+					email: "a@gmail.com",
+				},
+				{
+					id: "SV_05",
+					username: "username_1",
+					fullname: "Nguyễn Văn A",
+					email: "a@gmail.com",
+				}
+			]);
+	}
+
+	// $args = {username}
+	// Tên đăng nhập tồn tài callback(false);
+	// Tên đăng nhập không tồn tài callback(true);
+	this.verifyUserName = function ($args, callback){
+		callback(true);
+	}
+
+	// $args = { fullname, mssv, username, password, birthDay, school, address, email, description }
+	// Thêm thành công callback(false);
+	// Thêm thất bại callback(true);
+	this.registerStudent = function ($args, callback){
+		callback(true);
+	}
+
+	// $args = { id }
+	// Xóa thành công callback(false);
+	// Xóa thất bại callback(true);
+	this.deleteStudent = function ($args, callback){
+		callback(true);
+	}
+
 	return this;
 }
