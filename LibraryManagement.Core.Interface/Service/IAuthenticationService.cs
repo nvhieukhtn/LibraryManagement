@@ -11,10 +11,10 @@ namespace LibraryManagement.Core.Interface.Service
     {
         Task<string> LoginAsync(AccountModel account);
         Task<bool> RegisterAsync(AccountModel account);
-        Task<bool> UpgradeUserAsync(string token);
+        Task<bool> UpgradeUserAsync(Guid userId);
         Task<AccountModel> GetAccountInformationAsync(string token);
         Task<bool> LogoutAsync(string accountToken);
-        Task<bool> DowngradeAsync(string accountToken);
+        Task<bool> DowngradeAsync(Guid userId);
         Task<List<AccountModel>> GetListUsersAsync();
     }
 }

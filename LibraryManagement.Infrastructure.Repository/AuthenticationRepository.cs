@@ -43,13 +43,13 @@ namespace LibraryManagement.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> UpgradeUserAsync(string accountToken)
+        public async Task<bool> UpgradeUserAsync(Guid userId)
         {
             using (var db = DataAccessFactory.CreateDataAccess("sp_Account_Upgrade", DatabaseType.Write))
             {
                 var listParams = new Dictionary<string, object>
                 {
-                    {"Token", accountToken}
+                    {"UserId", userId}
                 };
                 var effectRows = await db.ExecuteNonQueryAsync(listParams);
                 return effectRows > 0;
@@ -71,10 +71,12 @@ namespace LibraryManagement.Infrastructure.Repository
                     var username = (string) data["Username"];
                     var type = (string)data["Type"];
                     var fullName = (string) data["FullName"];
+                    var role = (string) data["Role"];
                     var account = AccountModel.CreateAccount(type);
                     account.Id = id;
                     account.Username = username;
                     account.FullName = fullName;
+                    account.Role = role;
                     return account;
                 }
                 return null;
@@ -94,13 +96,13 @@ namespace LibraryManagement.Infrastructure.Repository
             }
         }
 
-        public async Task<bool> DowngradeAsync(string accountToken)
+        public async Task<bool> DowngradeAsync(Guid userId)
         {
             using (var db = DataAccessFactory.CreateDataAccess("sp_Account_Downgrade", DatabaseType.Write))
             {
                 var listParams = new Dictionary<string, object>
                 {
-                    {"Token", accountToken}
+                    {"UserId", userId}
                 };
                 var effectRows = await db.ExecuteNonQueryAsync(listParams);
                 return effectRows > 0;

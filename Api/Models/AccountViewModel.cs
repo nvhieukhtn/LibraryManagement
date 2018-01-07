@@ -17,7 +17,7 @@ namespace Api.Models
         public string Type { get; set; }
         public string Role { get; set; }
 
-
+        public Guid Id { get; set; }
         public AccountViewModel()
         {
             
@@ -31,6 +31,7 @@ namespace Api.Models
             EmailAddress = account.EmailAddress;
             Type = account.GetAccountType();
             Role = account.Role;
+            Id = account.Id;
         }
     }
 }

@@ -31,7 +31,7 @@
 						<span class="next-nav-text">Tài liệu đang mượn</span>
 					</a>
 				</li>
-				<li class="next-nav-item" ng-class="activeSidebar('add-book.html')">
+				<li ng-show="role == 'Admin'" class="next-nav-item" ng-class="activeSidebar('add-book.html')">
 					<a ng-click="changeContent('add-book.html')" class="next-nav-link">
 						<span class="next-nav-text">Thêm tài liệu</span>
 					</a>
@@ -51,7 +51,7 @@
 				</li>
 			</ul>
 		</li>
-		<li class="next-nav-item" ng-class="activeSidebar(['all-students.html','add-student.html','edit-student.html'])">
+		<li ng-show="role == 'Admin'" class="next-nav-item" ng-class="activeSidebar(['all-students.html'])">
 			<a ng-click="changeContent('all-students.html')" class="next-nav-link">
 				<i class="fa fa-user fw icon" aria-hidden="true"></i>
 				<span class="next-nav-text">Quản lý sinh viên</span>
@@ -60,11 +60,6 @@
 				<li class="next-nav-item" ng-class="activeSidebar('all-students.html')">
 					<a ng-click="changeContent('all-students.html')"  class="next-nav-link">
 						<span class="next-nav-text">Tất cả sinh viên</span>
-					</a>
-				</li>
-				<li class="next-nav-item" ng-class="activeSidebar('add-student.html')">
-					<a ng-click="changeContent('add-student.html')" class="next-nav-link">
-						<span class="next-nav-text">Thêm sinh viên</span>
 					</a>
 				</li>
 			</ul>

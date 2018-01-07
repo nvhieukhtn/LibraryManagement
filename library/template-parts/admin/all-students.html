@@ -23,23 +23,25 @@
 					<thead>
 						<tr>
 							<th>STT</th>
-							<th>Mã</th>
 							<th>Tên đăng nhập</th>
 							<th>Họ và tên</th>
 							<th>Email</th>
-							<th>Hành động</th>
+							<th>Loại TK</th>
+							<th>Vai trò</th>
+							<th class="text-right">#</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="studentInfo in studentInfos">
 							<td>{{$index+1}}</td>
-							<td>{{studentInfo.id}}</td>
-							<td>{{studentInfo.username}}</td>
-							<td>{{studentInfo.fullname}}</td>
-							<td>{{studentInfo.email}}</td>
-							<td>
-								<button class="btn btn-success" ng-click="changeContent('edit-student.html', {id: studentInfo.id})">Sửa</button>
-								<button class="btn btn-danger" ng-click="deleteStudent($index)">Xóa</button>
+							<td>{{studentInfo.Username}}</td>
+							<td>{{studentInfo.FullName}}</td>
+							<td>{{studentInfo.EmailAddress}}</td>
+							<td>{{studentInfo.Type}}</td>
+							<td>{{studentInfo.Role}}</td>
+							<td class="text-right">
+								<button ng-show="studentInfo.Type != 'VIP'" class="btn btn-success" ng-click="upgradeVIP(studentInfo.Id)">Nâng cấp VIP</button>
+								<button ng-show="studentInfo.Type == 'VIP'" class="btn btn-warning" ng-click="downgradeVIP(studentInfo.Id)">Hạ cấp VIP</button>
 							</td>
 						</tr>
 					</tbody>

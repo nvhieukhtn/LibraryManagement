@@ -213,10 +213,10 @@ IF OBJECT_ID (N'sp_Account_Upgrade', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Account_Upgrade
 GO 
 CREATE PROCEDURE sp_Account_Upgrade 
-	@Token UNIQUEIDENTIFIER
+	@UserId UNIQUEIDENTIFIER
 AS 
 BEGIN 
-	UPDATE Account SET Type = 'VIP' WHERE Token = @Token
+	UPDATE Account SET Type = 'VIP' WHERE ID = @UserId
 END
 
 GO
@@ -235,10 +235,10 @@ IF OBJECT_ID (N'sp_Account_Downgrade', N'P') IS NOT NULL
 	DROP PROCEDURE sp_Account_Downgrade
 GO 
 CREATE PROCEDURE sp_Account_Downgrade
-	@Token UNIQUEIDENTIFIER
+	@UserId UNIQUEIDENTIFIER
 AS 
-BEGIN
-	UPDATE Account SET Type = 'Normal' WHERE Token = @Token
+BEGIN 
+	UPDATE Account SET Type = 'Normal' WHERE ID = @UserId
 END
 
 

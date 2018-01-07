@@ -7,7 +7,7 @@ var services = new function() {
 				'Session' : sessionStorage.Session
 			}
 		};
-		this.http.get('http://localhost:50371/Library/RecentBorrowedDocument',config)
+		this.http.get('http://api.library.local/Library/RecentBorrowedDocument',config)
 			.then(function(response){
 				if(callback) callback(response.data);
 			}, function(error){
@@ -21,7 +21,7 @@ var services = new function() {
 				'Session' : sessionStorage.Session
 			}
 		};
-		this.http.get('http://localhost:50371/Library/List?type=' + args.type + '&sortDirection=' + args.sortDirection, config)
+		this.http.get('http://api.library.local/Library/List?type=' + args.type + '&sortDirection=' + args.sortDirection, config)
 			.then(function(response){
 				if(callback) callback(response.data);
 			}, function(error){
@@ -34,7 +34,7 @@ var services = new function() {
 				'Session' : sessionStorage.Session
 			}
 		};
-		this.http.get('http://localhost:50371/Notification/AllChanels?subscribe=' + args.subscribe, config)
+		this.http.get('http://api.library.local/Notification/AllChanels?subscribe=' + args.subscribe, config)
 			.then(function(response){
 				if(callback) callback(response.data);
 			}, function(error){
@@ -47,7 +47,7 @@ var services = new function() {
 				'Session' : sessionStorage.Session
 			}
 		};
-		this.http.get('http://localhost:50371/Library/BorrowingDocument', config)
+		this.http.get('http://api.library.local/Library/BorrowingDocument', config)
 			.then(function(response){
 				if(callback) callback(response.data);
 			}, function(error){
@@ -61,7 +61,7 @@ var services = new function() {
 			}
 		};
 		var data = {};
-		this.http.post('http://localhost:50371/Library/Borrow/' + args.id,data, config)
+		this.http.post('http://api.library.local/Library/Borrow/' + args.id,data, config)
 		.then(function(response){
 				if(callback) callback(true);
 			}, function(error){
@@ -77,7 +77,7 @@ var services = new function() {
 			}
 		};
 		var data = {};
-		this.http.post('http://localhost:50371/Library/Return/' + args.id,data, config)
+		this.http.post('http://api.library.local/Library/Return/' + args.id,data, config)
 		.then(function(response){
 				if(callback) callback(true);
 			}, function(error){
@@ -91,7 +91,7 @@ var services = new function() {
 			}
 		};
 		var data = {};
-		this.http.post('http://localhost:50371/Notification/SubscribeChanel/' + args.chanelName,data, config)
+		this.http.post('http://api.library.local/Notification/SubscribeChanel/' + args.chanelName,data, config)
 		.then(function(response){
 				if(callback) callback(true);
 			}, function(error){
@@ -108,7 +108,7 @@ var services = new function() {
 				'Session' : sessionStorage.Session
 			}
 		};
-		this.http.post('http://localhost:50371/Library/Add',args, config)
+		this.http.post('http://api.library.local/Library/Add',args, config)
 		.then(function(response){
 				if (callback) callback(true)
 			}, function(error){
@@ -202,42 +202,19 @@ var services = new function() {
 		if (callback) callback(true);
 	}
 
-	// args = {q}	- q: chuỗi tìm kiếm theo tên đăng nhập
-	// Trả về callback: [{ id, username, fullname, email }]
+	
 	this.getAllStudentInfos = function(args, callback=false){
-		if (callback)
-			callback([
-				{
-					id: "SV_01",
-					username: "username_1",
-					fullname: "Nguyễn Văn A",
-					email: "a@gmail.com",
-				},
-				{
-					id: "SV_02",
-					username: "username_1",
-					fullname: "Nguyễn Văn A",
-					email: "a@gmail.com",
-				},
-				{
-					id: "SV_03",
-					username: "username_1",
-					fullname: "Nguyễn Văn A",
-					email: "a@gmail.com",
-				},
-				{
-					id: "SV_04",
-					username: "username_1",
-					fullname: "Nguyễn Văn A",
-					email: "a@gmail.com",
-				},
-				{
-					id: "SV_05",
-					username: "username_1",
-					fullname: "Nguyễn Văn A",
-					email: "a@gmail.com",
-				}
-			]);
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		this.http.get('http://api.library.local/Authentication/List', config)
+			.then(function(response){
+				if(callback) callback(response.data);
+			}, function(error){
+				if(callback) callback('[]');
+			});
 	}
 
 	// $args = {username}
@@ -278,45 +255,20 @@ var services = new function() {
 		})
 	}
 
-	// Cập nhật tài khoản có id là $args.id
-	// $args.hasUpdatePass: Có thay đổi pass không. Nếu có thì pass mới là $args.password
-	// $args { id, fullname, mssv, birthDay(yyyy-mm-dd), hasUpdatePass, password, school, address, email, description }
-	// Thành công callback(true)
-	// Thất bại callback(false)
-	this.updateStudent = function($args, callback){
-		console.log($args);
-		callback(true);
-	}
-
 	// Tất cả thông báo
 	// Callback([ {id, Name, ChanelName, Description} ])
 	this.getAllNotitications = function(callback){
-		callback([
-			{
-				id: "NO_01",
-				Name: "Thông báo 1",
-				ChanelName: "Sách abc",
-				Description: "Vừa nhập 100 sách abc"
-			},
-			{
-				id: "NO_02",
-				Name: "Thông báo 2",
-				ChanelName: "Sách abc",
-				Description: "Vừa nhập 100 sách abc"
-			},
-			{
-				id: "NO_03",
-				Name: "Thông báo 3",
-				ChanelName: "Sách abc",
-				Description: "Vừa nhập 100 sách abc"
-			},
-			{
-				id: "NO_04",
-				Name: "Thông báo 4",
-				ChanelName: "Sách abc",
-				Description: "Vừa nhập 100 sách abc"
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
 			}
-		])
+		};
+		this.http.get('http://api.library.local/Notification/PullNotification', config)
+			.then(function(response){
+				callback(response.data);
+			},function(error){
+				callback([]);
+			});
 	}
 
 	// callback([string]) // list chanel name
@@ -337,8 +289,54 @@ var services = new function() {
 
 	// $args = { username, password }
 	// callback({success: true, ...})
-	this.signIn = function ($args, callback){
-		callback({success: true});
+	this.signIn = function (args, callback){
+		var data = {
+			Username: args.username,
+			Password: args.password
+		}
+		this.http.post('http://api.library.local/Authentication/Login', data)
+			.then(function(response){
+				if(callback) callback(response.data);
+			},function(error){
+				if(callback) callback('');
+			});
+	}
+	this.getRole = function(args, callback){
+		var config = {
+			headers:{
+				'Session' : sessionStorage.Session
+			}
+		};
+		this.http.get('http://api.library.local/Authentication/Role', config)
+			.then(function(response){
+				if(callback) callback(response.data);
+			}, function(error){
+				if(callback) callback('');
+			});
+	}
+	
+	this.upgradeVIP = function(args, callback){
+		var data = {
+			Id: args.Id
+		}
+		this.http.post('http://api.library.local/Authentication/UpgradeVIP', data)
+			.then(function(response){
+				callback(true);
+			}, function(error){
+				callback(false);
+			});
+	}
+	
+	this.downgradeVIP = function(args, callback){
+		var data = {
+			Id: args.Id
+		}
+		this.http.post('http://api.library.local/Authentication/Downgrade', data)
+			.then(function(response){
+				callback(true);
+			}, function(error){
+				callback(false);
+			});
 	}
 
 	return this;

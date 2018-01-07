@@ -3,7 +3,8 @@
 	var app = angular.module('app', []);
 
 	app.controller('body', ['$scope', '$http', function($scope, $http){
-		$scope.role = "admin"; // Admin || user
+		
+		$scope.role = "Admin"; // Admin || user
 		$scope.template_part = "home.html";
 		$scope.listNotifications = [];
 		$scope.changeContent = function(template_part, data=false) {
@@ -15,8 +16,6 @@
 				return (template_part.indexOf($scope.template_part) != -1) ? "active" : "";
 			return ($scope.template_part == template_part) ? "active" : "";
 		}
-		sessionStorage.Session = 'e3907d15-0d1e-45e3-906f-0cf0c141abe5';
-		sessionStorage.Role = 'User';
 		services.http = $http;
 
 		services.getAllNotitications(function(AllNotitications){
@@ -28,15 +27,12 @@
 	/****************************************   SIDEBAR  ************************************************/
 	/****************************************************************************************************/
 	app.controller('sidebar', ['$scope', '$http', function($scope, $http){
-		
+		$scope.role = sessionStorage.Role;
 	}]);
 	app.controller('home', ['$scope', function($scope){
 		$scope.rentedBooksInfo = [];
 		$scope.role = sessionStorage.Role;
 		services.getBookRented({
-			quantity: 10,		// Số lượng sách hiển thị (default: 10)
-			offset: 0,			// Số lượng sách bỏ qua (default: 0)
-			selects: [ 'id', 'bookName', 'renter', 'date' ]
 		},function(data){
 			$scope.rentedBooksInfo = data;
 		});
@@ -328,194 +324,48 @@
 	app.controller('all-students', ['$scope', function($scope){
 		$scope.studentInfos = [];
 		$scope.q = "";
-		services.getAllStudentInfos({
-			q: $scope.q
-		}, function($result){
-			$scope.studentInfos = $result;
-		});
-
-		$scope.deleteStudent = function (index){
-			if(confirm("Bạn có chắc muốn xóa 1 sinh viên?"))
-				services.deleteStudent({id:$scope.studentInfos[index].id}, function(success){
-					if (success){
-						bootbox.alert("Xóa thành công");
-						$scope.studentInfos.splice(index, 1);
-					} else {
-						bootbox.alert("Xóa không thành công");
-					}
-				})
-		}
-
-	}]);
-
-	app.controller('add-student', ['$scope', function($scope){
-		$scope.fullname = "";
-		$scope.mssv = "";
-		$scope.username = "";
-		$scope.password = "";
-		$scope.password_confirm = "";
-		$scope.birthDay = "";
-		$scope.school = "";
-		$scope.address = "";
-		$scope.email = "";
-		$scope.description = "";
-
-		function verifyStudentInfo(callback){
-			var mes = "";
-			if ($scope.fullname == ""){
-				bootbox.alert("Vui lòng nhập họ và tên");
-				return callback(false);
-			}
-			if ($scope.mssv == ""){
-				bootbox.alert("Vui lòng nhập MSSV <br>");
-				return callback(false);
-			}
-			if ($scope.school == ""){
-				bootbox.alert("Vui lòng nhập trường học <br>");
-				return callback(false);
-			}
-			if ($scope.username == ""){
-				bootbox.alert("Vui lòng nhập tên đăng nhập <br>");
-				return callback(false);
-			}
-			if ($scope.password == ""){
-				bootbox.alert("Vui lòng nhập mật khẩu <br>");
-				return callback(false);
-			}
-			if ($scope.password_confirm == ""){
-				bootbox.alert("Vui lòng nhập xác nhận mật khẩu <br>");
-				return callback(false);
-			}
-			if ($scope.password != $scope.password_confirm || $scope.password.length < 8){
-				bootbox.alert("Xác nhận mật khẩu không khớp hoặc quá ngắn");
-				return callback(false);
-			}
-
-			services.verifyUserName({username: $scope.username}, function(success){
-				if (!success) {
-					bootbox.alert("Tên đăng nhập đã tồn tại");
-					return callback(false);
-				}
-				return callback(true);
+		var load = function(){
+			services.getAllStudentInfos({			
+			}, function(result){
+				$scope.studentInfos = result;
 			});
 		}
-		$scope.addStudent = function (){
-			verifyStudentInfo(function(success){
+		
+		$scope.upgradeVIP = function(id){
+			services.upgradeVIP({
+				Id: id
+			}, function(success){
 				if (success){
-					services.registerStudent({
-						fullname: $scope.fullname,
-						mssv: $scope.mssv,
-						username: $scope.username,
-						password: $scope.password,
-						birthDay: $scope.birthDay.getDate() +"-"+ ($scope.birthDay.getMonth()+1) +"-"+ ($scope.birthDay.getYear() + 1900),
-						school: $scope.school,
-						address: $scope.address,
-						email: $scope.email,
-						description: $scope.description
-					}, function(success){
-						if (success)
-							bootbox.alert("Đã thêm thành công");
-						else
-							bootbox.alert("Thêm không thành công");
-					});
+					bootbox.alert("Thành công");
+					load();
 				}
-			})
+				else
+					bootbox.alert("Thất bại");
+			});
 		}
+		$scope.downgradeVIP = function(id){
+			services.downgradeVIP({
+				Id: id
+			}, function(success){
+				if (success){
+					bootbox.alert("Thành công");
+					load();
+				}
+				else
+					bootbox.alert("Thất bại");
+				
+			});
+		}
+		load();
 	}]);
 
-	app.controller('edit-student', ['$scope', function($scope){
-		var id = $scope.data.id;
-		$scope.fullname = "";
-		$scope.mssv = "";
-		$scope.username = "";
-		$scope.hasUpdatePass = false;
-		$scope.password = "";
-		$scope.password_confirm = "";
-		$scope.birthDay = "";
-		$scope.school = "";
-		$scope.address = "";
-		$scope.email = "";
-		$scope.description = "";
-
-		services.getStudentInfo({id:id}, function(studentInfo){
-			if (studentInfo == null)
-				return bootbox.alert("Không tìm thấy id sinh viên");
-			$scope.fullname = studentInfo.fullname;
-			$scope.mssv = studentInfo.mssv;
-			$scope.username = studentInfo.username;
-			$scope.birthDay = new Date(studentInfo.birthDay);
-			$scope.school = studentInfo.school;
-			$scope.address = studentInfo.address;
-			$scope.email = studentInfo.email;
-			$scope.description = studentInfo.description;
-		});
-
-		function verifyStudentInfo(callback){
-
-			if ($scope.fullname == ""){
-				bootbox.alert("Vui lòng nhập họ và tên");
-				return callback(false);
-			}
-			if ($scope.mssv == ""){
-				bootbox.alert("Vui lòng nhập MSSV <br>");
-				return callback(false);
-			}
-			if ($scope.school == ""){
-				bootbox.alert("Vui lòng nhập trường học <br>");
-				return callback(false);
-			}
-			if ($scope.username == ""){
-				bootbox.alert("Vui lòng nhập tên đăng nhập <br>");
-				return callback(false);
-			}
-			if ($scope.hasUpdatePass){
-				if ($scope.password == ""){
-					bootbox.alert("Vui lòng nhập mật khẩu <br>");
-					return callback(false);
-				}
-				if ($scope.password_confirm == ""){
-					bootbox.alert("Vui lòng nhập xác nhận mật khẩu <br>");
-					return callback(false);
-				}
-				if ($scope.password != $scope.password_confirm || $scope.password.length < 8){
-					bootbox.alert("Xác nhận mật khẩu không khớp hoặc quá ngắn");
-					return callback(false);
-				}
-			}
-			return callback(true);
-
-		}
-		$scope.updateStudent = function (){
-			verifyStudentInfo(function(success){
-				if (success){
-					services.updateStudent({
-						id: id,
-						fullname: $scope.fullname,
-						mssv: $scope.mssv,
-						hasUpdatePass: $scope.hasUpdatePass,
-						password: $scope.password,
-						birthDay: $scope.birthDay.getDate() +"-"+ ($scope.birthDay.getMonth()+1) +"-"+ ($scope.birthDay.getYear() + 1900),
-						school: $scope.school,
-						address: $scope.address,
-						email: $scope.email,
-						description: $scope.description
-					}, function(success){
-						if (success)
-							bootbox.alert("Cập nhật thành công");
-						else
-							bootbox.alert("Cập nhật không thành công");
-					});
-				}
-			})
-		}
-	}]);
 
 	app.controller('all-notifications', ['$scope', function($scope){
 		$scope.Detail = function(index){
 			var detail = "";
-			detail += "<b>Tên thông báo: </b>" + $scope.listNotifications[index].Name + "<br>";
-			detail += "<b>Chanel: </b>" + $scope.listNotifications[index].ChanelName + "<br>";
-			detail += "<b>Mô tả: </b>" + $scope.listNotifications[index].Description + "<br>";
+			detail += "<b>Tên thông báo: </b>" + $scope.listNotifications[index].Title + "<br>";
+			detail += "<b>Chanel: </b>" + $scope.listNotifications[index].Chanel + "<br>";
+			detail += "<b>Mô tả: </b>" + $scope.listNotifications[index].Content + "<br>";
 			bootbox.alert(detail);
 		}
 	}]);
@@ -583,9 +433,19 @@
 					username: $scope.username,
 					password: $scope.password
 				}, function(data){
-					if (! data.success)
+					if (!data)
 						$scope.message = "Tên đăng nhập hoặc mật khẩu không đúng"
-					else redirect("index.html");
+					else {
+						sessionStorage.Session = data;
+						services.getRole({},
+						function(data){
+							if(!data)
+								data = 'User';
+							sessionStorage.Role = data;
+							redirect("index.html");
+						});	
+						
+					}
 				});
 			})
 		}

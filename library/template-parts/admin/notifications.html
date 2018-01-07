@@ -37,9 +37,9 @@
 					<tbody>
 						<tr ng-repeat="notification in listNotifications">
 							<td>{{$index + 1}}</td>
-							<td>{{notification.Name}}</td>
-							<td>{{notification.ChanelName}}</td>
-							<td>{{notification.Description}}</td>
+							<td>{{notification.Title}}</td>
+							<td>{{notification.Chanel}}</td>
+							<td>{{notification.Content}}</td>
 							<td class="text-right">
 								<button class="btn btn-primary" ng-click="Detail($index)">Chi tiết</button>
 							</td>

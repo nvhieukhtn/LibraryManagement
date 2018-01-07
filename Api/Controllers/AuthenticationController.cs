@@ -24,6 +24,18 @@ namespace Api.Controllers
         {
             _authenticationService = _container.Resolve<IAuthenticationService>();
         }
+
+        [Route("Role")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetRoleAsync()
+        {
+            var permision = Permission.GetPermission(Request.Headers);
+            var account = await _authenticationService.GetAccountInformationAsync(permision.AccountToken);
+            if (account == null)
+                return BadRequest("");
+            return Ok(account.Role);
+        }
+
         [Route("Login")]
         [HttpPost]
         public async Task<IHttpActionResult> LoginAsync([FromBody] AccountViewModel account)
@@ -67,24 +79,20 @@ namespace Api.Controllers
         }
 
         [Route("UpgradeVIP")]
-        [HttpPut]
-        public async Task<IHttpActionResult> UpgradeVIPAsync()
+        [HttpPost]
+        public async Task<IHttpActionResult> UpgradeVIPAsync([FromBody]AccountViewModel account)
         {
-            var headers = Request.Headers;
-
-            var accountToken = headers.GetValues("Session").FirstOrDefault();
-            var succeed = await _authenticationService.UpgradeUserAsync(accountToken);
+            var succeed = await _authenticationService.UpgradeUserAsync(account.Id);
             if (succeed)
                 return Ok();
             return BadRequest();
         }
 
         [Route("Downgrade")]
-        [HttpPut]
-        public async Task<IHttpActionResult> DowngradeAsync()
+        [HttpPost]
+        public async Task<IHttpActionResult> DowngradeAsync([FromBody]AccountViewModel account)
         {
-            var permission = Permission.GetPermission(Request.Headers);
-            var succeed = await _authenticationService.DowngradeAsync(permission.AccountToken);
+            var succeed = await _authenticationService.DowngradeAsync(account.Id);
             if (succeed)
                 return Ok();
             return BadRequest();

@@ -40,9 +40,9 @@ namespace LibraryManagement.Core.Service
             return succeed;
         }
 
-        public async Task<bool> UpgradeUserAsync(string accountToken)
+        public async Task<bool> UpgradeUserAsync(Guid userId)
         {
-            var succeed = await _authenticationRepository.UpgradeUserAsync(accountToken);
+            var succeed = await _authenticationRepository.UpgradeUserAsync(userId);
             return succeed;
         }
 
@@ -58,9 +58,9 @@ namespace LibraryManagement.Core.Service
             return succeed;
         }
 
-        public async Task<bool> DowngradeAsync(string accountToken)
+        public async Task<bool> DowngradeAsync(Guid userId)
         {
-            var succeed = await _authenticationRepository.DowngradeAsync(accountToken);
+            var succeed = await _authenticationRepository.DowngradeAsync(userId);
             return succeed;
         }
 

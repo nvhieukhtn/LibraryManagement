@@ -92,7 +92,7 @@ namespace LibraryManagement.Infrastructure.Repository
                     {
                         Title = (string) reader["Title"],
                         Content = (string) reader["Content"],
-                        IsRead = (bool) reader["IsRead"]
+                        IsRead = (bool) reader["IsRead"],
                     };
                     listNotifications.Add(notification);
                 }

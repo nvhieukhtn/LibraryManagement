@@ -67,8 +67,8 @@ textarea { resize: vertical; }
 .has-add-more .remove-me { background-color: #da4f49; color: #fff; }
 
 .sign-in { position:  relative; min-height: 100vh; width: 100%; overflow: hidden; display: table; }
-.sign-in .bg { position:  absolute; left: -40px; right: -40px; bottom: -40px; top: -40px; background-position: center; background-size: cover; filter: blur(20px); }
-.sign-in .container-sign-in { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 500px; height: auto; max-width: 80%; background-color: rgba(255,255,255,.3); padding: 30px 20px; }
+.sign-in .bg { position:  fixed; left: -40px; right: -40px; bottom: -40px; top: -40px; background-position: center; background-size: cover; filter: blur(20px); }
+.sign-in .container-sign-in { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 500px; height: auto; max-width: 80%; background-color: rgba(255,255,255,.3); padding: 30px 20px; }
 .sign-in .title-site { font-size: 22px; font-weight: bold; color: #333; margin-top: 0px; margin-bottom: 15px; }
 .sign-in .input-group { margin-bottom: 15px; }
 .sign-in .btn { text-transform: uppercase; }
